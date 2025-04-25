@@ -6,6 +6,173 @@
     <title>Glassmorphism Login</title>
     <link rel="stylesheet" href="portal.css">
     <style>
+        :root {
+            /* 深色模式变量 */
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --primary-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+            --text-color: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.8);
+            --divider-text-color: rgba(255, 255, 255, 0.8);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-focus-border: rgba(129, 140, 248, 0.7);
+            --input-focus-bg: rgba(255, 255, 255, 0.15);
+            --input-focus-shadow: rgba(129, 140, 248, 0.3);
+            --button-bg: linear-gradient(135deg, #38bdf8, #818cf8);
+            --button-hover-shadow: rgba(56, 189, 248, 0.3);
+            --social-button-bg: rgba(255, 255, 255, 0.05);
+            --social-button-hover: rgba(255, 255, 255, 0.1);
+            --theme-icon: '🌙';
+            --particles-color: #dbeafe;
+            --particles-line-color: #93c5fd;
+        }
+
+        [data-theme="light"] {
+            /* 明亮模式变量 */
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --primary-gradient: linear-gradient(135deg, #0ea5e9, #6366f1);
+            --text-color: #1e293b;
+            --text-muted: rgba(51, 65, 85, 0.9);
+            --register-link-color: rgba(30, 41, 59, 0.95);
+            --divider-text-color: rgba(30, 41, 59, 0.9);
+            --input-bg: rgba(255, 255, 255, 0.8);
+            --input-border: rgba(203, 213, 225, 0.9);
+            --input-focus-border: rgba(99, 102, 241, 0.7);
+            --input-focus-bg: rgba(255, 255, 255, 1);
+            --input-focus-shadow: rgba(99, 102, 241, 0.3);
+            --button-bg: linear-gradient(135deg, #0ea5e9, #6366f1);
+            --button-hover-shadow: rgba(14, 165, 233, 0.3);
+            --social-button-bg: rgba(203, 213, 225, 0.3);
+            --social-button-hover: rgba(203, 213, 225, 0.5);
+            --theme-icon: '☀️';
+            --particles-color: #7dd3fc;
+            --particles-line-color: #3b82f6;
+        }
+
+        /* 为全局元素添加颜色过渡 */
+        body {
+            background-color: var(--bg-color);
+            transition: background-color 0.5s ease;
+        }
+
+        #particles-js {
+            background-color: var(--bg-color);
+            transition: background-color 0.5s ease;
+        }
+
+        .login-logo {
+            background: var(--primary-gradient);
+            transition: transform 0.5s ease, background 0.5s ease;
+        }
+
+        .login-header h1 {
+            color: var(--text-color);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: background 0.5s ease;
+        }
+
+        .login-header p {
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+
+        .form-group label {
+            color: var(--text-color);
+            transition: color 0.5s ease;
+        }
+
+        .form-group input {
+            border-color: var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease, border-color 0.5s ease, background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--input-focus-border);
+            background-color: var(--input-focus-bg);
+            box-shadow: 0 0 0 4px var(--input-focus-shadow);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+            transition: color 0.5s ease;
+        }
+
+        .remember-me label {
+            color: var(--text-color);
+            transition: color 0.5s ease;
+        }
+
+        .forgot-password {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .login-button {
+            background: var(--button-bg);
+            transition: all 0.3s ease, box-shadow 0.5s ease, background 0.5s ease;
+        }
+
+        .login-button:hover {
+            box-shadow: 0 5px 15px var(--button-hover-shadow);
+        }
+
+        .register-link, .login-link {
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+
+        /* 添加专门针对浅色模式的样式 */
+        [data-theme="light"] .register-link {
+            color: var(--register-link-color);
+            font-weight: 500;
+        }
+
+        .social-login-text {
+            color: var(--text-muted);
+        }
+
+        .social-button {
+            background: var(--social-button-bg);
+            border-color: var(--input-border);
+            color: var(--text-color);
+        }
+
+        .social-button:hover {
+            background: var(--social-button-hover);
+        }
+
+        /* 主题切换按钮样式 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(45deg);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -22,10 +189,6 @@
             position: relative;
         }
 
-        #particles-js {
-            background-color: #0f172a !important; /* 深蓝色背景 */
-        }
-
         .login-container {
             position: relative;
             z-index: 1;
@@ -34,12 +197,12 @@
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--card-bg);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             padding: 45px 35px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -97,7 +260,7 @@
 
         .form-group label {
             display: block;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-color);
             margin-bottom: 10px;
             font-size: 15px;
             font-weight: 500;
@@ -109,22 +272,22 @@
             width: 100%;
             padding: 16px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
             font-size: 15px;
             outline: none;
             transition: all 0.3s ease;
         }
 
         .form-group input:focus {
-            border-color: rgba(129, 140, 248, 0.5);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.1);
+            border-color: var(--input-focus-border);
+            background-color: var(--input-focus-bg);
+            box-shadow: 0 0 0 4px var(--input-focus-shadow);
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-muted);
         }
 
         .remember-forgot {
@@ -147,12 +310,12 @@
         }
 
         .remember-me label {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
             font-size: 15px;
         }
 
         .forgot-password {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
             font-size: 15px;
             text-decoration: none;
             transition: color 0.3s ease;
@@ -243,6 +406,65 @@
             width: 100%;
         }
 
+        /* 社交登录样式 */
+        .social-login {
+            margin-top: 20px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: var(--divider-text-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--social-button-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 130px;
+        }
+
+        .social-button:hover {
+            background: var(--social-button-hover);
+            transform: translateY(-2px);
+        }
+
+        .github-button svg {
+            color: var(--text-color);
+        }
+
         .count-particles {
             display: none; /* 隐藏粒子计数器 */
         }
@@ -261,6 +483,8 @@
 </head>
 <body>
     <div id="particles-js"></div>
+    
+    <button class="theme-toggle" id="themeToggle">🌙</button>
     
     <div class="count-particles">
         <span class="js-count-particles"></span> 
@@ -293,6 +517,29 @@
                 <div class="register-link">
                     Don't have an account yet? <a href="#">Create account</a>
                 </div>
+                <!-- 添加社交登录部分 -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>或使用社交账号登录</span>
+                    </div>
+                    <div class="social-buttons">
+                        <button class="social-button github-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            <span>GitHub</span>
+                        </button>
+                        <button class="social-button google-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" fill="#FFC107"/>
+                                <path d="M5.842,14.124l-2.178,1.696c1.916,3.78,5.832,6.356,10.303,5.691c3.162-0.469,5.781-2.411,7.196-5.006l-2.318-1.718c-0.973,1.928-2.86,3.379-5.124,3.658C9.907,18.993,7.071,17.327,5.842,14.124z" fill="#FF3D00"/>
+                                <path d="M12.545,2c-2.667,0-5.112,0.979-6.982,2.601l2.144,1.696c1.432-1.302,3.544-2.038,5.395-1.63c1.366,0.299,2.565,1.126,3.343,2.285l2.208-2.147C17.062,3.223,14.945,2,12.545,2z" fill="#4CAF50"/>
+                                <path d="M21.973,10.252H12.545v3.744h9.428c-0.099-1.262-0.382-2.452-0.84-3.559L21.973,10.252z" fill="#1976D2"/>
+                            </svg>
+                            <span>Google</span>
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -301,19 +548,136 @@
     <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
     <script src="particles.js"></script>
     <script>
-    // 优化粒子设置
     document.addEventListener('DOMContentLoaded', function() {
-        if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-            const pJS = window.pJSDom[0].pJS;
+        // 初始化粒子效果
+        initParticles();
+        
+        // DOM元素
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // 初始化主题
+        initTheme();
+        
+        // 主题切换
+        themeToggle.addEventListener('click', function() {
+            toggleTheme();
+        });
+        
+        // 初始化粒子效果
+        function initParticles() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": getComputedStyle(document.documentElement).getPropertyValue('--particles-color').trim()
+                    },
+                    "shape": {
+                        "type": "circle",
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": getComputedStyle(document.documentElement).getPropertyValue('--particles-line-color').trim(),
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+        
+        // 主题初始化
+        function initTheme() {
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
             
-            // 更改粒子颜色和连接线
-            pJS.particles.color.value = "#dbeafe";
-            pJS.particles.line_linked.color = "#93c5fd";
-            pJS.particles.line_linked.opacity = 0.3;
-            pJS.particles.move.speed = 3;  // 减慢移动速度
+            if (localStorage.getItem('theme')) {
+                document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+                updateThemeToggle();
+            } else if (prefersDarkScheme.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                updateThemeToggle();
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                updateThemeToggle();
+            }
+        }
+        
+        // 主题切换
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
-            // 刷新粒子系统
-            pJS.fn.particlesRefresh();
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            updateThemeToggle();
+            updateParticlesColors();
+        }
+        
+        // 更新主题图标
+        function updateThemeToggle() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeToggle.textContent = getComputedStyle(document.documentElement).getPropertyValue('--theme-icon').trim().replace(/"/g, '');
+        }
+        
+        // 更新粒子颜色
+        function updateParticlesColors() {
+            if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+                const pJS = window.pJSDom[0].pJS;
+                
+                pJS.particles.color.value = getComputedStyle(document.documentElement).getPropertyValue('--particles-color').trim();
+                pJS.particles.line_linked.color = getComputedStyle(document.documentElement).getPropertyValue('--particles-line-color').trim();
+                
+                pJS.fn.particlesRefresh();
+            }
         }
     });
     </script>
