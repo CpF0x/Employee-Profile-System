@@ -826,6 +826,36 @@
             }
         }
 
+        /* 页面过渡动画 */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .page-transition.active {
+            transform: translateY(0);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        body.page-animating {
+            overflow: hidden;
+        }
+
         /* Responsive styles */
         @media (max-width: 768px) {
             .main-content {
@@ -850,6 +880,9 @@
 </head>
 <body>
     <div id="particles-js"></div>
+
+    <!-- 页面过渡动画元素 -->
+    <div class="page-transition" id="pageTransition"></div>
 
     <!-- 主题切换按钮 -->
     <button id="themeToggle" class="theme-toggle" aria-label="切换主题">
@@ -880,7 +913,7 @@
                 </li>
                 <li class="nav-item">
                     <span class="icon">📋</span>
-                    <a href="professional-timeline.html">Experience</a>
+                    <a href="professional-timeline.html" class="timeline-link">Experience</a>
                 </li>
                 <li class="nav-item">
                     <span class="icon">✉️</span>
@@ -979,7 +1012,7 @@
                     <p style="margin-bottom: 20px; color: var(--nav-text); transition: color 0.3s ease;">
                         探索我的职业成长历程，了解我的项目经验和技能发展
                     </p>
-                    <a href="professional-timeline.html" style="display: inline-block; text-decoration: none;">
+                    <a href="professional-timeline.html" style="display: inline-block; text-decoration: none;" id="timelineLink" class="timeline-link">
                         <button class="btn btn-primary">
                             <span>📋</span> 查看完整经验时间线
                         </button>
@@ -1376,6 +1409,28 @@
                     }
                 },
                 "retina_detect": true
+            });
+        });
+
+        // 页面过渡动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineLinks = document.querySelectorAll('.timeline-link');
+            const pageTransition = document.getElementById('pageTransition');
+            
+            timelineLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetUrl = this.getAttribute('href');
+                    
+                    // 添加动画状态类
+                    document.body.classList.add('page-animating');
+                    pageTransition.classList.add('active');
+                    
+                    // 动画完成后跳转到目标页面
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 600);
+                });
             });
         });
     </script>
