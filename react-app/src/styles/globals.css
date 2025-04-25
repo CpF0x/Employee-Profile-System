@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 防止主题闪烁的关键样式 */
+  html:not(.theme-ready) {
+    opacity: 0 !important;
+  }
+
+  html.theme-ready {
+    opacity: 1 !important;
+    transition: opacity 0.2s ease-in;
+  }
+
+  /* 预设主题背景色 */
+  html.dark {
+    @apply bg-dark-bg text-dark-text;
+  }
+
+  html.light {
+    @apply bg-light-bg text-light-text;
+  }
+
+  body {
+    @apply m-0 font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* 登录卡片 */
+  .login-card {
+    @apply relative bg-white/[0.15] dark:bg-white/[0.15] backdrop-blur-xl rounded-3xl border border-white/20 shadow-card transition-all duration-300 ease-in-out hover:shadow-card-hover hover:translate-y-[-5px] hover:border-white/[0.18];
+  }
+
+  /* 登录按钮 */
+  .btn-login {
+    @apply w-full py-4 px-4 border-none rounded-xl bg-gradient-to-r from-primary to-secondary-light text-white text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out mb-6 relative overflow-hidden tracking-wider hover:shadow-button-hover hover:translate-y-[-2px];
+  }
+
+  /* 按钮闪光效果 */
+  .btn-login::before {
+    @apply content-[''] absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-700 ease-in-out;
+  }
+
+  .btn-login:hover::before {
+    @apply animate-button-shine;
+  }
+
+  /* 社交登录按钮 */
+  .btn-social {
+    @apply flex items-center justify-center gap-2.5 bg-light-social-bg dark:bg-dark-social-bg border border-light-input-border dark:border-dark-input-border text-light-text dark:text-dark-text py-3 px-5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-300 ease-in-out w-32 hover:bg-light-social-hover dark:hover:bg-dark-social-hover hover:translate-y-[-2px];
+  }
+
+  /* 表单输入 */
+  .form-input {
+    @apply w-full py-3 px-4 rounded-xl bg-light-input-bg dark:bg-dark-input-bg text-light-text dark:text-dark-text border border-light-input-border dark:border-dark-input-border transition-all duration-300 ease-in-out text-base focus:border-light-input-focus-border dark:focus:border-dark-input-focus-border focus:bg-light-input-focus-bg dark:focus:bg-dark-input-focus-bg focus:shadow-[0_0_0_4px_rgba(99,102,241,0.3)] dark:focus:shadow-[0_0_0_4px_rgba(129,140,248,0.3)] focus:scale-[1.02] focus:outline-none;
+  }
+
+  /* 表单标签 */
+  .form-label {
+    @apply block mb-2 font-medium text-light-text dark:text-dark-text transition-colors duration-300 ease-in-out;
+  }
+}

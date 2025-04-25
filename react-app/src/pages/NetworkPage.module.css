@@ -1,0 +1,23 @@
+.search-bar input {
+    transition: all 0.3s ease; /* 确保包含 transform */
+}
+
+.search-bar input:focus {
+    border-color: rgba(129, 140, 248, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.1);
+    outline: none;
+    transform: scale(1.015); /* 添加轻微缩放 */
+}
+
+.edit-mode input, .edit-mode textarea {
+    transition: all 0.3s ease; /* 确保包含 transform */
+}
+
+.edit-mode input:focus, .edit-mode textarea:focus {
+    border-color: rgba(129, 140, 248, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.1);
+    outline: none;
+    transform: scale(1.01); /* 添加轻微缩放 */
+} 

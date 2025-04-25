@@ -1,0 +1,59 @@
+:root {
+  /* 深色模式变量 */
+  --bg-color: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.15);
+  --primary-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+  --primary-color: #38bdf8;
+  --text-color: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.8);
+  --divider-text-color: rgba(255, 255, 255, 0.8);
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --input-border: rgba(255, 255, 255, 0.2);
+  --input-focus-border: rgba(129, 140, 248, 0.7);
+  --input-focus-bg: rgba(255, 255, 255, 0.15);
+  --input-focus-shadow: rgba(129, 140, 248, 0.3);
+  --button-bg: linear-gradient(135deg, #38bdf8, #818cf8);
+  --button-hover-shadow: rgba(56, 189, 248, 0.3);
+  --social-button-bg: rgba(255, 255, 255, 0.05);
+  --social-button-hover: rgba(255, 255, 255, 0.1);
+  --theme-icon: '🌙';
+  --particles-color: #dbeafe;
+  --particles-line-color: #93c5fd;
+  transition: none !important; /* 禁用所有初始过渡 */
+}
+
+[data-theme="light"] {
+  /* 明亮模式变量 */
+  --bg-color: #f1f5f9;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --primary-gradient: linear-gradient(135deg, #0ea5e9, #6366f1);
+  --primary-color: #0ea5e9;
+  --text-color: #1e293b;
+  --text-muted: rgba(51, 65, 85, 0.9);
+  --register-link-color: rgba(30, 41, 59, 0.95);
+  --divider-text-color: rgba(30, 41, 59, 0.9);
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --input-border: rgba(203, 213, 225, 0.9);
+  --input-focus-border: rgba(99, 102, 241, 0.7);
+  --input-focus-bg: rgba(255, 255, 255, 1);
+  --input-focus-shadow: rgba(99, 102, 241, 0.3);
+  --button-bg: linear-gradient(135deg, #0ea5e9, #6366f1);
+  --button-hover-shadow: rgba(14, 165, 233, 0.3);
+  --social-button-bg: rgba(203, 213, 225, 0.3);
+  --social-button-hover: rgba(203, 213, 225, 0.5);
+  --theme-icon: '☀️';
+  --particles-color: #7dd3fc;
+  --particles-line-color: #3b82f6;
+  transition: none !important; /* 禁用所有初始过渡 */
+}
+
+/* 启用过渡效果 */
+html.theme-ready :root,
+html.theme-ready [data-theme="light"],
+html.theme-ready [data-theme="dark"] {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+html.theme-ready * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

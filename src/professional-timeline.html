@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Professional Timeline</title>
+  <style>
+    :root {
+      --primary: #3498db;
+      --secondary: #2980b9;
+      --dark: #232a34;
+      --light: #f5f9fc;
+      --success: #27ae60;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+      --text: #333;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: var(--dark);
+      color: white;
+      padding: 20px 0;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .timeline-container {
+      position: relative;
+      margin: 40px 0;
+    }
+    
+    .timeline-track {
+      position: relative;
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      margin: 30px 0;
+    }
+    
+    .timeline-progress {
+      position: absolute;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+      width: 0;
+      transition: width 1s ease-in-out;
+    }
+    
+    .timeline-markers {
+      position: relative;
+      height: 0;
+    }
+    
+    .timeline-marker {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      top: -14px;
+      transform: translateX(-10px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    
+    .timeline-marker:hover, .timeline-marker.active {
+      width: 28px;
+      height: 28px;
+      top: -18px;
+      transform: translateX(-14px);
+      background-color: var(--secondary);
+    }
+    
+    .timeline-marker::after {
+      content: attr(data-year);
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .timeline-details {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .milestone-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    
+    .milestone-card.active {
+      display: block;
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .milestone-title {
+      font-size: 20px;
+      color: var(--dark);
+    }
+    
+    .milestone-duration {
+      background-color: var(--primary);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
+    }
+    
+    .milestone-content {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .milestone-logo {
+      min-width: 80px;
+      height: 80px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--dark);
+    }
+    
+    .milestone-details h4 {
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .skill-tag {
+      background-color: #e0e0e0;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
+    }
+    
+    .achievements {
+      margin-top: 15px;
+    }
+    
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    
+    .achievement-icon {
+      color: var(--success);
+    }
+    
+    .stats-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      background-color: var(--light);
+      border-radius: 8px;
+      padding: 10px 15px;
+      text-align: center;
+      min-width: 100px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--text);
+    }
+    
+    .timeline-years {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 0 10px;
+      color: #777;
+      font-size: 14px;
+    }
+    
+    .visualization {
+      margin-top: 30px;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .visualization-title {
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+    
+    .growth-chart {
+      height: 200px;
+      position: relative;
+      margin-top: 20px;
+    }
+    
+    .chart-bar {
+      position: absolute;
+      bottom: 0;
+      width: 40px;
+      background-color: var(--primary);
+      border-radius: 5px 5px 0 0;
+      transition: height 1s ease-out;
+    }
+    
+    .chart-label {
+      position: absolute;
+      bottom: -25px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+    }
+    
+    .chart-value {
+      position: absolute;
+      top: -25px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .insights {
+      margin-top: 40px;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .insights-title {
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+    
+    .insight-item {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .insight-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .insight-icon {
+      background-color: var(--light);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 18px;
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .controls {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .milestone-content {
+        flex-direction: column;
+      }
+      
+      .milestone-logo {
+        align-self: center;
+      }
+      
+      .stats-container {
+        flex-wrap: wrap;
+      }
+      
+      .stat-item {
+        flex: 1 0 40%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <div>
+            <h1>Alex Johnson</h1>
+            <p>Senior Product Manager</p>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" id="playTimelineBtn">
+            <span id="playBtnText">Play Timeline</span>
+          </button>
+          <button class="btn btn-outline" id="shareBtn">Share</button>
+        </div>
+      </div>
+    </header>
+    
+    <div class="timeline-container">
+      <div class="timeline-track">
+        <div class="timeline-progress" id="timelineProgress"></div>
+      </div>
+      <div class="timeline-markers" id="timelineMarkers"></div>
+      <div class="timeline-years">
+        <span>2016</span>
+        <span>2025</span>
+      </div>
+    </div>
+    
+    <div class="timeline-details" id="timelineDetails"></div>
+    
+    <div class="visualization">
+      <h3 class="visualization-title">Skills Growth Over Time</h3>
+      <div class="growth-chart" id="skillsChart"></div>
+    </div>
+    
+    <div class="insights">
+      <h3 class="insights-title">Career Insights</h3>
+      <div class="insight-item">
+        <div class="insight-icon">📈</div>
+        <div>
+          <h4>Growth Rate</h4>
+          <p>Your career has shown exceptional growth in product management skills, with a 45% improvement in the last 2 years.</p>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-icon">🌟</div>
+        <div>
+          <h4>Standout Achievement</h4>
+          <p>Leading the flagship SaaS platform development shows your ability to manage complex projects and teams.</p>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-icon">🔮</div>
+        <div>
+          <h4>Next Opportunity</h4>
+          <p>Based on your trajectory, a Director of Product role could be within reach in the next 1-2 years.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const timelineData = [
+      {
+        id: 1,
+        year: 2016,
+        position: "Junior Product Analyst",
+        company: "DataViz Tech",
+        duration: "2016 - 2018",
+        description: "Started career as a product analyst, focusing on market research and user feedback analysis.",
+        skills: ["Market Research", "Data Analysis", "User Feedback"],
+        achievements: [
+          "Improved user feedback collection process by 30%",
+          "Contributed to 2 major product launches"
+        ],
+        stats: {
+          projects: 4,
+          teamSize: 3,
+          impact: "Regional"
+        },
+        skillLevel: 20
+      },
+      {
+        id: 2,
+        year: 2018,
+        position: "Product Manager",
+        company: "InnoTech Solutions",
+        duration: "2018 - 2020",
+        description: "Advanced to product manager role, leading feature development and product roadmap planning.",
+        skills: ["Product Roadmap", "Feature Prioritization", "Stakeholder Management"],
+        achievements: [
+          "Launched 5 key features that increased user retention by 25%",
+          "Led cross-functional team of designers and developers"
+        ],
+        stats: {
+          projects: 8,
+          teamSize: 7,
+          impact: "National"
+        },
+        skillLevel: 45
+      },
+      {
+        id: 3,
+        year: 2020,
+        position: "Senior Product Manager",
+        company: "GlobalApp Inc",
+        duration: "2020 - 2022",
+        description: "Promoted to senior role with responsibility for the company's mobile application suite.",
+        skills: ["Product Strategy", "Mobile App Development", "Team Leadership"],
+        achievements: [
+          "Doubled monthly active users within first year",
+          "Redesigned core user experience, improving satisfaction scores by 40%"
+        ],
+        stats: {
+          projects: 12,
+          teamSize: 12,
+          impact: "Global"
+        },
+        skillLevel: 70
+      },
+      {
+        id: 4,
+        year: 2022,
+        position: "Product Lead",
+        company: "TechCorp",
+        duration: "2022 - Present",
+        description: "Leading product strategy and development for the company's flagship SaaS platform. Managing a team of product managers and working closely with engineering, design, and marketing teams.",
+        skills: ["Product Leadership", "SaaS Platform", "Team Management", "Strategic Planning"],
+        achievements: [
+          "Led successful launch of platform 2.0 with 98% positive user feedback",
+          "Built and mentored a team of 5 product managers",
+          "Increased annual recurring revenue by 60%"
+        ],
+        stats: {
+          projects: 15,
+          teamSize: 25,
+          impact: "Enterprise"
+        },
+        skillLevel: 90
+      }
+    ];
+
+    // Initialize the timeline
+    function initTimeline() {
+      const markersContainer = document.getElementById('timelineMarkers');
+      const detailsContainer = document.getElementById('timelineDetails');
+      const skillsChart = document.getElementById('skillsChart');
+      
+      // Clear any existing content
+      markersContainer.innerHTML = '';
+      detailsContainer.innerHTML = '';
+      skillsChart.innerHTML = '';
+      
+      // Calculate positions
+      const totalYears = 2025 - 2016;
+      
+      // Create markers and milestone cards
+      timelineData.forEach((milestone, index) => {
+        const position = ((milestone.year - 2016) / totalYears) * 100;
+        
+        // Create marker
+        const marker = document.createElement('div');
+        marker.className = 'timeline-marker';
+        marker.setAttribute('data-year', milestone.year);
+        marker.style.left = `${position}%`;
+        marker.dataset.index = index;
+        markersContainer.appendChild(marker);
+        
+        // Create milestone card
+        const card = document.createElement('div');
+        card.className = 'milestone-card';
+        card.id = `milestone-${index}`;
+        card.innerHTML = `
+          <div class="milestone-header">
+            <h3 class="milestone-title">${milestone.position}</h3>
+            <span class="milestone-duration">${milestone.duration}</span>
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-logo">${milestone.company.charAt(0)}</div>
+            <div class="milestone-details">
+              <h4>${milestone.company}</h4>
+              <p>${milestone.description}</p>
+              <div class="skills-container">
+                ${milestone.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+              </div>
+              <div class="achievements">
+                <h4>Key Achievements</h4>
+                ${milestone.achievements.map(achievement => `
+                  <div class="achievement-item">
+                    <span class="achievement-icon">✅</span>
+                    <span>${achievement}</span>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="stats-container">
+                <div class="stat-item">
+                  <div class="stat-value">${milestone.stats.projects}</div>
+                  <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${milestone.stats.teamSize}</div>
+                  <div class="stat-label">Team Size</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">${milestone.stats.impact}</div>
+                  <div class="stat-label">Impact</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        detailsContainer.appendChild(card);
+        
+        // Create skill chart bar
+        const barWidth = 100 / timelineData.length;
+        const barPosition = index * barWidth;
+        
+        const chartBar = document.createElement('div');
+        chartBar.className = 'chart-bar';
+        chartBar.style.left = `${barPosition + barWidth/4}%`;
+        chartBar.style.width = `${barWidth/2}%`;
+        chartBar.style.height = '0';
+        
+        const chartLabel = document.createElement('div');
+        chartLabel.className = 'chart-label';
+        chartLabel.textContent = milestone.year;
+        chartBar.appendChild(chartLabel);
+        
+        const chartValue = document.createElement('div');
+        chartValue.className = 'chart-value';
+        chartValue.textContent = `${milestone.skillLevel}%`;
+        chartBar.appendChild(chartValue);
+        
+        skillsChart.appendChild(chartBar);
+        
+        // Add event listener to marker
+        marker.addEventListener('click', () => {
+          selectMilestone(index);
+        });
+      });
+      
+      // Select the first milestone by default
+      selectMilestone(timelineData.length - 1);
+      
+      // Animate skill chart with delay
+      setTimeout(() => {
+        const chartBars = document.querySelectorAll('.chart-bar');
+        chartBars.forEach((bar, index) => {
+          bar.style.height = `${timelineData[index].skillLevel}%`;
+        });
+      }, 500);
+    }
+    
+    // Select a milestone
+    function selectMilestone(index) {
+      // Update active marker
+      const markers = document.querySelectorAll('.timeline-marker');
+      markers.forEach((marker, i) => {
+        if (i === parseInt(index)) {
+          marker.classList.add('active');
+        } else {
+          marker.classList.remove('active');
+        }
+      });
+      
+      // Update active milestone card
+      const cards = document.querySelectorAll('.milestone-card');
+      cards.forEach((card, i) => {
+        if (i === parseInt(index)) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+      
+      // Update timeline progress
+      const progress = document.getElementById('timelineProgress');
+      const position = ((timelineData[index].year - 2016) / (2025 - 2016)) * 100;
+      progress.style.width = `${position}%`;
+    }
+    
+    // Play timeline animation
+    let isPlaying = false;
+    let playInterval;
+    let currentIndex = 0;
+    
+    function togglePlayTimeline() {
+      const playBtn = document.getElementById('playTimelineBtn');
+      const playBtnText = document.getElementById('playBtnText');
+      
+      if (isPlaying) {
+        clearInterval(playInterval);
+        playBtnText.textContent = 'Play Timeline';
+        isPlaying = false;
+      } else {
+        currentIndex = 0;
+        playBtnText.textContent = 'Pause';
+        isPlaying = true;
+        
+        selectMilestone(currentIndex);
+        
+        playInterval = setInterval(() => {
+          currentIndex++;
+          if (currentIndex >= timelineData.length) {
+            clearInterval(playInterval);
+            playBtnText.textContent = 'Play Timeline';
+            isPlaying = false;
+            return;
+          }
+          selectMilestone(currentIndex);
+        }, 2000);
+      }
+    }
+    
+    // Share functionality
+    function shareTimeline() {
+      alert('Share functionality would be implemented here. This would allow users to create a public link to their professional timeline or export it as a PDF.');
+    }
+    
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', () => {
+      initTimeline();
+      
+      // Add event listeners
+      document.getElementById('playTimelineBtn').addEventListener('click', togglePlayTimeline);
+      document.getElementById('shareBtn').addEventListener('click', shareTimeline);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+/* 防止主题闪烁的关键样式 */
+html:not(.theme-ready) {
+  opacity: 0 !important;
+}
+
+html.theme-ready {
+  opacity: 1 !important;
+  transition: opacity 0.2s ease-in;
+}
+
+/* 预设主题背景色 */
+html[data-theme="dark"] {
+  background-color: #0f172a !important;
+}
+
+html[data-theme="light"] {
+  background-color: #f1f5f9 !important;
+}
+
+/* 全局样式 */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

@@ -1,0 +1,51 @@
+.formOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rememberMe input {
+  margin: 0;
+  accent-color: var(--primary-color, #818cf8);
+}
+
+.rememberMe label {
+  color: var(--text-color);
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.forgotPassword {
+  color: var(--text-color);
+  font-size: 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.forgotPassword::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background: #818cf8;
+  transition: width 0.3s ease;
+}
+
+.forgotPassword:hover {
+  color: #818cf8;
+}
+
+.forgotPassword:hover::after {
+  width: 100%;
+}

@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glassmorphism Login</title>
     <link rel="stylesheet" href="portal.css">
+
+    <!-- 防止主题闪烁的关键样式 -->
+    <style id="anti-flash">
+        /* 初始隐藏页面内容，直到主题加载完成 */
+        html:not(.theme-ready) {
+            opacity: 0 !important;
+        }
+
+        /* 当主题准备好后显示内容 */
+        html.theme-ready {
+            opacity: 1 !important;
+            transition: opacity 0.2s ease-in;
+        }
+
+        /* 预设主题背景色 */
+        html[data-theme="dark"] {
+            background-color: #0f172a !important;
+        }
+
+        html[data-theme="light"] {
+            background-color: #f1f5f9 !important;
+        }
+    </style>
+
+    <!-- 尽早执行的主题初始化脚本 -->
+    <script>
+        (function() {
+            // 存储当前主题状态
+            window.__THEME_INITIALIZED__ = false;
+
+            try {
+                // 获取主题偏好
+                const storedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+
+                // 立即应用主题到HTML元素
+                document.documentElement.setAttribute('data-theme', theme);
+
+                // 将主题存储到localStorage
+                if (theme !== storedTheme) {
+                    localStorage.setItem('theme', theme);
+                }
+
+                // 标记主题已初始化
+                window.__THEME_INITIALIZED__ = true;
+                window.__CURRENT_THEME__ = theme;
+            } catch (e) {
+                console.error('主题初始化失败:', e);
+                // 确保页面至少可见
+                document.documentElement.setAttribute('data-theme', 'light');
+                window.__THEME_INITIALIZED__ = true;
+                window.__CURRENT_THEME__ = 'light';
+            }
+        })();
+    </script>
     <style>
         :root {
             /* 深色模式变量 */
@@ -71,6 +127,7 @@
             color: var(--text-color);
             background: var(--primary-gradient);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             transition: background 0.5s ease;
         }
@@ -168,7 +225,7 @@
             color: white;
             font-size: 18px;
         }
-        
+
         .theme-toggle:hover {
             transform: rotate(45deg);
         }
@@ -242,6 +299,7 @@
             margin-bottom: 12px;
             background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -474,7 +532,7 @@
                 width: 90%;
                 padding: 20px 10px;
             }
-            
+
             .login-card {
                 padding: 35px 25px;
             }
@@ -483,11 +541,11 @@
 </head>
 <body>
     <div id="particles-js"></div>
-    
+
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    
+
     <div class="count-particles">
-        <span class="js-count-particles"></span> 
+        <span class="js-count-particles"></span>
     </div>
 
     <div class="login-container">
@@ -549,20 +607,32 @@
     <script src="particles.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 确保页面在主题应用后才显示
+        document.documentElement.classList.add('theme-ready');
+
+        // 禁用初始防闪烁样式
+        setTimeout(function() {
+            document.getElementById('anti-flash').disabled = true;
+        }, 100);
+
         // 初始化粒子效果
         initParticles();
-        
+
         // DOM元素
         const themeToggle = document.getElementById('themeToggle');
-        
+
         // 初始化主题
         initTheme();
-        
+
         // 主题切换
-        themeToggle.addEventListener('click', function() {
+        themeToggle.addEventListener('click', function(e) {
+            // 阻止默认行为
+            e.preventDefault();
+            e.stopPropagation();
+
             toggleTheme();
         });
-        
+
         // 初始化粒子效果
         function initParticles() {
             particlesJS("particles-js", {
@@ -633,11 +703,22 @@
                 "retina_detect": true
             });
         }
-        
+
         // 主题初始化
         function initTheme() {
+            // 如果已经在HTML加载时初始化了主题，则使用该主题
+            if (window.__THEME_INITIALIZED__ && window.__CURRENT_THEME__) {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme !== window.__CURRENT_THEME__) {
+                    document.documentElement.setAttribute('data-theme', window.__CURRENT_THEME__);
+                }
+                updateThemeToggle();
+                return;
+            }
+
+            // 否则手动初始化主题
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-            
+
             if (localStorage.getItem('theme')) {
                 document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
                 updateThemeToggle();
@@ -649,33 +730,39 @@
                 updateThemeToggle();
             }
         }
-        
+
         // 主题切换
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            
-            updateThemeToggle();
-            updateParticlesColors();
+
+            // 先更新全局变量，再更新DOM
+            window.__CURRENT_THEME__ = newTheme;
+
+            // 使用requestAnimationFrame确保在下一次渲染周期更新DOM
+            requestAnimationFrame(() => {
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                updateThemeToggle();
+                updateParticlesColors();
+            });
         }
-        
+
         // 更新主题图标
         function updateThemeToggle() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             themeToggle.textContent = getComputedStyle(document.documentElement).getPropertyValue('--theme-icon').trim().replace(/"/g, '');
         }
-        
+
         // 更新粒子颜色
         function updateParticlesColors() {
             if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
                 const pJS = window.pJSDom[0].pJS;
-                
+
                 pJS.particles.color.value = getComputedStyle(document.documentElement).getPropertyValue('--particles-color').trim();
                 pJS.particles.line_linked.color = getComputedStyle(document.documentElement).getPropertyValue('--particles-line-color').trim();
-                
+
                 pJS.fn.particlesRefresh();
             }
         }
