@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glassmorphism Login</title>
+  
+  <!-- 防止主题闪烁的关键样式 -->
+  <style id="anti-flash">
+    /* 初始隐藏页面内容，直到主题加载完成 */
+    html:not(.theme-ready) {
+      opacity: 0 !important;
+    }
+
+    /* 预设主题背景色 */
+    html[data-theme="dark"] {
+      background-color: #0f172a !important;
+    }
+
+    html[data-theme="light"] {
+      background-color: #f1f5f9 !important;
+    }
+  </style>
+
+  <!-- 尽早执行的主题初始化脚本 -->
+  <script>
+    (function() {
+      try {
+        // 获取主题偏好
+        const storedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+
+        // 立即应用主题到HTML元素
+        document.documentElement.setAttribute('data-theme', theme);
+
+        // 将主题存储到localStorage
+        if (theme !== storedTheme) {
+          localStorage.setItem('theme', theme);
+        }
+      } catch (e) {
+        console.error('主题初始化失败:', e);
+        // 确保页面至少可见
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- 加载粒子库 -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html> 

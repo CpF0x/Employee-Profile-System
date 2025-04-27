@@ -1,31 +1,38 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
-import { initializeTheme } from './utils/theme';
+import LoginPage from './pages/LoginPage';
+import { ThemeProvider } from './context/ThemeContext';
+import './styles/theme.css';
+import './styles/Login.css';
 
-// 在React渲染前初始化主题
-initializeTheme();
+// 等待DOM加载完成
+document.addEventListener('DOMContentLoaded', () => {
+  // 确保页面在主题应用后才显示
+  document.documentElement.classList.add('theme-ready');
 
-// 获取根元素
-const rootElement = document.getElementById('root');
-
-if (!rootElement) {
-  throw new Error('找不到根元素');
-}
-
-// 使用requestAnimationFrame确保在下一次渲染周期渲染React应用
-requestAnimationFrame(() => {
-  createRoot(rootElement).render(
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  );
-
-  // 渲染完成后确保页面可见
+  // 禁用初始防闪烁样式
   setTimeout(() => {
-    document.documentElement.classList.add('theme-ready');
-  }, 50);
+    const antiFlashStyle = document.getElementById('anti-flash') as HTMLStyleElement;
+    if (antiFlashStyle) {
+      antiFlashStyle.disabled = true;
+    }
+  }, 100);
 });
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<App />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  </React.StrictMode>
+);

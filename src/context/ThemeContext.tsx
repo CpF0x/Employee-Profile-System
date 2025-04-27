@@ -1,11 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { ThemeContextType, Theme } from '../types';
 
 // 创建主题上下文
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
@@ -13,44 +13,43 @@ interface ThemeProviderProps {
  * 管理应用的主题状态并提供给子组件
  */
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  // 初始化主题状态
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // 尝试从localStorage获取主题
-    const storedTheme = localStorage.getItem('theme') as Theme | null;
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return storedTheme ? storedTheme === 'dark' : prefersDark;
-  });
-
-  // 当主题状态改变时更新文档和localStorage
+  const [theme, setTheme] = useState<string>('dark');
+  
   useEffect(() => {
-    const newTheme: Theme = isDarkMode ? 'dark' : 'light';
-    
-    // 先更新全局变量，再更新DOM
-    window.__CURRENT_THEME__ = newTheme;
-    
-    // 使用requestAnimationFrame确保在下一次渲染周期更新DOM
-    requestAnimationFrame(() => {
-      // 更新HTML类名以支持Tailwind暗色模式
-      if (isDarkMode) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-      } else {
-        document.documentElement.classList.add('light');
-        document.documentElement.classList.remove('dark');
-      }
+    // 初始化主题
+    try {
+      const storedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && 
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
       
-      localStorage.setItem('theme', newTheme);
-    });
-  }, [isDarkMode]);
-
-  // 切换主题的函数
-  const toggleTheme = (): void => {
-    setIsDarkMode(prevMode => !prevMode);
+      setTheme(initialTheme);
+      document.documentElement.setAttribute('data-theme', initialTheme);
+      
+      if (initialTheme !== storedTheme) {
+        localStorage.setItem('theme', initialTheme);
+      }
+    } catch (e) {
+      console.error('主题初始化失败:', e);
+      document.documentElement.setAttribute('data-theme', 'light');
+      setTheme('light');
+    }
+    
+    // 设置主题准备就绪标识
+    setTimeout(() => {
+      document.documentElement.classList.add('theme-ready');
+    }, 100);
+  }, []);
+  
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
   };
-
-  // 提供主题状态和切换函数给子组件
+  
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

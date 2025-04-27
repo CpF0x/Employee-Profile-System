@@ -18,11 +18,21 @@ html[data-theme="light"] {
 }
 
 /* 全局样式 */
+html, body, #root {
+  min-height: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto !important;
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: scroll !important;
 }
 
 code {

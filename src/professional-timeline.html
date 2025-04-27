@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Professional Timeline</title>
+  <title>Professional Timeline | ProNet</title>
+  <link rel="stylesheet" href="portal.css">
   <!-- 立即应用主题，防止闪烁 -->
   <script>
     (function() {
@@ -14,536 +15,458 @@
         const theme = storedTheme || (prefersDark ? 'dark' : 'light');
 
         // 立即应用主题到HTML元素
-        document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
       } catch (e) {
         console.error('主题初始化失败:', e);
       }
     })();
   </script>
   <style>
+    /* 主题变量 */
     :root {
-      --primary: #3498db;
-      --secondary: #2980b9;
-      --dark: #232a34;
-      --light: #f5f9fc;
-      --success: #27ae60;
-      --warning: #f1c40f;
-      --danger: #e74c3c;
-      --text: #333;
-      --card-bg: white;
-      --timeline-track: #e0e0e0;
-      --muted-text: #777;
-      --header-bg: var(--dark);
-      --card-border: rgba(0, 0, 0, 0.1);
-      --card-shadow: rgba(0, 0, 0, 0.1);
-      --skill-tag-bg: #e0e0e0;
-      --skill-tag-text: #333;
-      --insight-border: #eee;
-      --milestone-logo-bg: #f0f0f0;
-      --milestone-title: var(--dark);
-    }
-
-    /* 深色模式变量 */
-    [data-theme="dark"] {
-      --primary: #38bdf8;
-      --secondary: #818cf8;
-      --dark: #0f172a;
-      --light: #1e293b;
-      --text: #e2e8f0;
+      /* 深色模式变量 */
+      --bg-color: #0f172a;
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
+      --text-color: #e2e8f0;
       --card-bg: rgba(255, 255, 255, 0.05);
-      --timeline-track: #334155;
-      --muted-text: rgba(255, 255, 255, 0.5);
-      --header-bg: rgba(15, 23, 42, 0.7);
       --card-border: rgba(255, 255, 255, 0.1);
-      --card-shadow: rgba(0, 0, 0, 0.3);
-      --skill-tag-bg: rgba(255, 255, 255, 0.08);
-      --skill-tag-text: rgba(255, 255, 255, 0.9);
-      --insight-border: rgba(255, 255, 255, 0.1);
-      --milestone-logo-bg: rgba(255, 255, 255, 0.05);
-      --milestone-title: var(--text);
+      --header-bg: rgba(15, 23, 42, 0.7);
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --input-border: rgba(255, 255, 255, 0.1);
+      --input-focus-border: rgba(129, 140, 248, 0.5);
+      --input-focus-bg: rgba(255, 255, 255, 0.08);
+      --nav-text: rgba(255, 255, 255, 0.7);
+      --muted-text: rgba(255, 255, 255, 0.5);
+      --particles-color: #dbeafe;
+      --particles-line-color: #93c5fd;
+      --particles-opacity: 0.3;
+      --primary-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+      --secondary-bg: rgba(255, 255, 255, 0.05);
+      --secondary-hover: rgba(255, 255, 255, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --profile-name-gradient: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+      --btn-text-color: white;
+      --btn-secondary-color: white;
+      --btn-secondary-bg: rgba(255, 255, 255, 0.05);
+      --btn-secondary-border: rgba(255, 255, 255, 0.1);
+      --section-border: rgba(255, 255, 255, 0.1);
+      --experience-border: rgba(255, 255, 255, 0.05);
+      --experience-hover: rgba(255, 255, 255, 0.02);
+      --timeline-line: rgba(56, 189, 248, 0.3);
+      --timeline-dot-border: rgba(56, 189, 248, 0.5);
+      --timeline-dot-bg: rgba(56, 189, 248, 0.1);
     }
 
+    /* 浅色模式变量 */
+    [data-theme="light"] {
+      --bg-color: #f8fafc;
+      --bg-gradient: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      --text-color: #1e293b;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --header-bg: rgba(255, 255, 255, 0.8);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(0, 0, 0, 0.1);
+      --input-focus-border: rgba(99, 102, 241, 0.5);
+      --input-focus-bg: rgba(255, 255, 255, 1);
+      --nav-text: rgba(30, 41, 59, 0.7);
+      --muted-text: rgba(30, 41, 59, 0.5);
+      --particles-color: #7dd3fc;
+      --particles-line-color: #3b82f6;
+      --particles-opacity: 0.2;
+      --primary-gradient: linear-gradient(135deg, #0ea5e9, #6366f1);
+      --secondary-bg: rgba(0, 0, 0, 0.05);
+      --secondary-hover: rgba(0, 0, 0, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --profile-name-gradient: linear-gradient(135deg, #0ea5e9, #6366f1);
+      --btn-text-color: white;
+      --btn-secondary-color: #1e293b;
+      --btn-secondary-bg: rgba(255, 255, 255, 0.7);
+      --btn-secondary-border: rgba(0, 0, 0, 0.1);
+      --section-border: rgba(0, 0, 0, 0.1);
+      --experience-border: rgba(0, 0, 0, 0.05);
+      --experience-hover: rgba(0, 0, 0, 0.02);
+      --timeline-line: rgba(14, 165, 233, 0.3);
+      --timeline-dot-border: rgba(14, 165, 233, 0.5);
+      --timeline-dot-bg: rgba(14, 165, 233, 0.1);
+    }
+
+    /* Base Styles */
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--light);
-      color: var(--text);
-      line-height: 1.6;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: page-enter 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      background: transparent; /* 移除背景，让粒子背景显示 */
+      color: var(--text-color);
+      line-height: 1.5;
       position: relative;
       min-height: 100vh;
+      transition: color 0.5s ease;
     }
 
-    /* 页面背景渐变 */
-    body::before {
-      content: "";
+    #particles-js {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--light), var(--light));
-      z-index: -1;
-      transition: background 0.3s ease;
-    }
-
-    [data-theme="dark"] body::before {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-    }
-
-    @keyframes page-enter {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* 修复底部空白问题 */
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      min-height: 100%;
-      height: auto;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      background: var(--bg-gradient);
+      transition: all 0.5s ease;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
-      min-height: calc(100vh - 40px);
-      padding-bottom: 80px;
+      padding: 0 20px;
       position: relative;
+      z-index: 1;
     }
 
+    /* Header */
     header {
       background-color: var(--header-bg);
-      color: white;
-      padding: 20px 0;
-      margin-bottom: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px var(--card-shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 4px 20px var(--shadow-color);
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--card-border);
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .header-content {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .user-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background-color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+    .logo {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-size: 24px;
       font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s ease;
     }
 
-    .controls {
-      display: flex;
-      gap: 15px;
+    .search-bar {
+      flex-grow: 1;
+      max-width: 280px;
+      margin: 0 20px;
+      position: relative;
     }
 
-    .btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
+    .search-bar input {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
       transition: all 0.3s ease;
     }
 
-    .btn-primary {
-      background-color: var(--primary);
-      color: white;
+    .search-bar input:focus {
+      border-color: var(--input-focus-border);
+      background-color: var(--input-focus-bg);
+      box-shadow: 0 0 0 4px var(--shadow-color);
+      outline: none;
     }
 
-    .btn-primary:hover {
-      background-color: var(--secondary);
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted-text);
+      transition: color 0.3s ease;
     }
 
-    .btn-outline {
-      background-color: transparent;
-      border: 2px solid var(--primary);
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 12px;
+      position: relative;
+    }
+
+    .nav-item a {
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-item a:hover {
       color: var(--primary);
     }
 
-    .btn-outline:hover {
-      background-color: var(--primary);
+    .icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
       color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
+    .profile-section {
+      display: flex;
+      align-items: center;
+      border-radius: 24px;
+      padding: 6px 12px;
+      background-color: var(--secondary-bg);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .profile-section:hover {
+      background-color: var(--secondary-hover);
+    }
+
+    .profile-pic {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background-color: #38bdf8;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Timeline Styles */
     .timeline-container {
-      position: relative;
-      margin: 40px 0;
+      padding: 30px 0;
     }
 
-    .timeline-track {
-      position: relative;
-      height: 8px;
-      background-color: var(--timeline-track);
-      border-radius: 4px;
-      margin: 30px 0;
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 40px;
     }
 
-    .timeline-progress {
+    .timeline-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .timeline-subtitle {
+      font-size: 18px;
+      color: var(--nav-text);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 30px 0;
+    }
+
+    .timeline::before {
+      content: '';
       position: absolute;
-      height: 100%;
-      background-color: var(--primary);
-      border-radius: 4px;
-      width: 0;
-      transition: width 1s ease-in-out;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: var(--timeline-line);
+      transform: translateX(-50%);
     }
 
-    .timeline-markers {
+    .timeline-item {
+      margin-bottom: 60px;
       position: relative;
-      height: 0;
+      display: flex;
     }
 
-    .timeline-marker {
+    .timeline-item:nth-child(odd) {
+      justify-content: flex-start;
+      padding-right: 50%;
+    }
+
+    .timeline-item:nth-child(even) {
+      justify-content: flex-end;
+      padding-left: 50%;
+    }
+
+    .timeline-dot {
       position: absolute;
+      left: 50%;
+      top: 0;
       width: 20px;
       height: 20px;
-      background-color: var(--primary);
       border-radius: 50%;
-      top: -14px;
-      transform: translateX(-10px);
-      cursor: pointer;
-      transition: all 0.3s ease;
+      background-color: var(--timeline-dot-bg);
+      border: 2px solid var(--timeline-dot-border);
+      transform: translateX(-50%);
       z-index: 2;
     }
 
-    .timeline-marker:hover, .timeline-marker.active {
-      width: 28px;
-      height: 28px;
-      top: -18px;
-      transform: translateX(-14px);
-      background-color: var(--secondary);
-    }
-
-    .timeline-marker::after {
-      content: attr(data-year);
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .timeline-details {
-      margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .milestone-card {
+    .timeline-content {
       background-color: var(--card-bg);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px var(--card-shadow);
-      border: 1px solid var(--card-border);
-      display: none;
-      transform: translateY(20px);
-      opacity: 0;
-      transition: all 0.5s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 8px 30px var(--shadow-color);
+      padding: 25px;
+      position: relative;
+      max-width: 90%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .milestone-card.active {
-      display: block;
-      transform: translateY(0);
-      opacity: 1;
+    .timeline-content:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     }
 
-    .milestone-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .timeline-item:nth-child(odd) .timeline-content::after {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--card-border);
+      border-top: 1px solid var(--card-border);
+      transform: rotate(45deg);
+    }
+
+    .timeline-item:nth-child(even) .timeline-content::after {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--card-bg);
+      border-left: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      transform: rotate(45deg);
+    }
+
+    .timeline-date {
+      font-size: 14px;
+      color: var(--muted-text);
+      margin-bottom: 10px;
+    }
+
+    .timeline-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+
+    .timeline-company {
+      font-size: 16px;
+      color: var(--primary, #38bdf8);
       margin-bottom: 15px;
     }
 
-    .milestone-title {
-      font-size: 20px;
-      color: var(--milestone-title);
+    .timeline-description {
+      font-size: 15px;
+      color: var(--nav-text);
+      line-height: 1.6;
     }
 
-    .milestone-duration {
-      background-color: var(--primary);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 14px;
-    }
-
-    .milestone-content {
-      display: flex;
-      gap: 20px;
-    }
-
-    .milestone-logo {
-      min-width: 80px;
-      height: 80px;
-      background-color: var(--milestone-logo-bg);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: var(--primary);
-      border: 1px solid var(--card-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-    }
-
-    .milestone-details h4 {
-      margin-bottom: 10px;
-      color: var(--text);
-      transition: color 0.3s ease;
-    }
-
-    .skills-container {
+    .timeline-skills {
+      margin-top: 15px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 15px;
     }
 
     .skill-tag {
-      background-color: var(--skill-tag-bg);
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 14px;
-      color: var(--skill-tag-text);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .achievements {
-      margin-top: 15px;
-    }
-
-    .achievement-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-
-    .achievement-icon {
-      color: var(--success);
-    }
-
-    .stats-container {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .stat-item {
-      background-color: var(--light);
-      border-radius: 8px;
-      padding: 10px 15px;
-      text-align: center;
-      min-width: 100px;
-      border: 1px solid var(--card-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    .stat-label {
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .timeline-years {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      padding: 0 10px;
-      color: var(--muted-text);
-      font-size: 14px;
-      transition: color 0.3s ease;
-    }
-
-    .visualization {
-      margin-top: 30px;
-      background-color: var(--card-bg);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px var(--card-shadow);
-      border: 1px solid var(--card-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .visualization-title {
-      margin-bottom: 15px;
-      color: var(--text);
-      transition: color 0.3s ease;
-    }
-
-    .growth-chart {
-      height: 200px;
-      position: relative;
-      margin-top: 20px;
-      margin-bottom: 30px;
-      overflow: visible;
-    }
-
-    .chart-bar {
-      position: absolute;
-      bottom: 0;
-      width: 40px;
-      background-color: var(--primary);
-      border-radius: 5px 5px 0 0;
-      transition: height 1s ease-out;
-      max-height: 100%;
-    }
-
-    .chart-label {
-      position: absolute;
-      bottom: -25px;
-      width: 100%;
-      text-align: center;
+      background-color: var(--secondary-bg);
+      border-radius: 20px;
+      padding: 5px 12px;
       font-size: 12px;
+      color: var(--text-color);
     }
 
-    .chart-value {
-      position: absolute;
-      top: -25px;
-      width: 100%;
-      text-align: center;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .insights {
-      margin-top: 40px;
-      background-color: var(--card-bg);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px var(--card-shadow);
-      border: 1px solid var(--card-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .insights-title {
-      margin-bottom: 15px;
-      color: var(--text);
-      transition: color 0.3s ease;
-    }
-
-    .insight-item {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--insight-border);
-    }
-
-    .insight-item:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .insight-icon {
-      background-color: var(--light);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      border: 1px solid var(--card-border);
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-    }
-
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .controls {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .milestone-content {
-        flex-direction: column;
-      }
-
-      .milestone-logo {
-        align-self: center;
-      }
-
-      .stats-container {
-        flex-wrap: wrap;
-      }
-
-      .stat-item {
-        flex: 1 0 40%;
-      }
-    }
-
-    /* 返回按钮样式 */
-    .back-button {
+    /* 主题切换按钮 */
+    .theme-toggle {
       position: fixed;
       bottom: 20px;
       left: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      border-radius: 50%;
       width: 45px;
       height: 45px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
       cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
+      font-size: 20px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      z-index: 1000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(30deg);
+      box-shadow: 0 6px 20px var(--shadow-color);
+    }
+
+    /* 返回按钮 */
+    .back-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      z-index: 1000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .back-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px var(--shadow-color);
     }
 
     /* 页面过渡动画 */
@@ -553,480 +476,393 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--light), var(--light));
+      background: var(--bg-gradient);
       z-index: 9999;
-      transform: translateY(-100%);
+      transform: translateY(100%);
       transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), background 0.3s ease;
-    }
-
-    [data-theme="dark"] .page-transition {
-      background: linear-gradient(135deg, var(--dark), var(--light));
     }
 
     .page-transition.active {
       transform: translateY(0);
     }
 
+    @keyframes slideIn {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
     body.page-animating {
       overflow: hidden;
     }
 
-    /* 主题切换按钮 */
-    .theme-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 100;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 30px;
+      }
 
-    .theme-toggle:hover {
-      transform: rotate(30deg);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      .timeline-item {
+        padding-right: 0 !important;
+        padding-left: 80px !important;
+        justify-content: flex-start !important;
+      }
+
+      .timeline-dot {
+        left: 30px;
+      }
+
+      .timeline-content {
+        max-width: 100%;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content::after {
+        right: auto;
+        left: -10px;
+        border-right: none;
+        border-left: 1px solid var(--card-border);
+        border-top: none;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .nav-item span:not(.icon) {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="particles-js"></div>
+
   <!-- 页面过渡动画元素 -->
   <div class="page-transition" id="pageTransition"></div>
 
-  <!-- 返回按钮 -->
-  <button class="back-button" id="backButton">
-    ←
-  </button>
-
   <!-- 主题切换按钮 -->
-  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+  <button id="themeToggle" class="theme-toggle" aria-label="切换主题">
     🌙
   </button>
 
-  <div class="container">
-    <header>
-      <div class="header-content">
-        <div class="user-info">
-          <div class="user-avatar">A</div>
-          <div>
-            <h1>Alex Johnson</h1>
-            <p>Senior Product Manager</p>
+  <!-- 返回按钮 -->
+  <a href="index.html" class="back-button" id="backButton">
+    ↩
+  </a>
+
+  <header>
+    <div class="container header-content">
+      <a href="index.html" class="logo">ProNet</a>
+
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search">
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <span class="icon">🏠</span>
+          <a href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <span class="icon">��</span>
+          <a href="#">Network</a>
+        </li>
+        <li class="nav-item">
+          <span class="icon">��</span>
+          <a href="#">Jobs</a>
+        </li>
+        <li class="nav-item">
+          <span class="icon">📋</span>
+          <a href="professional-timeline.html" class="timeline-link">Experience</a>
+        </li>
+        <li class="nav-item">
+          <span class="icon">✉️</span>
+          <a href="#">Messages</a>
+        </li>
+        <li class="nav-item">
+          <span class="icon">🔔</span>
+          <span class="notification-badge">3</span>
+          <a href="#">Notifications</a>
+        </li>
+      </ul>
+
+      <div class="profile-section">
+        <div class="profile-pic"></div>
+        <span>Me ▼</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container timeline-container">
+    <div class="timeline-header">
+      <h1 class="timeline-title">我的专业经验时间线</h1>
+      <p class="timeline-subtitle">从开始到现在，记录我的职业成长历程，展示我的项目经验和技能发展。</p>
+    </div>
+    
+    <div class="timeline">
+      <!-- Timeline Item 1 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2022 - 至今</div>
+          <h3 class="timeline-title">产品经理</h3>
+          <div class="timeline-company">TechCorp</div>
+          <p class="timeline-description">
+            负责公司旗舰产品的整体产品策略和路线图规划，管理跨职能团队协作，推动产品创新和用户体验优化。成功推出多个重要功能，产品活跃用户增长30%，留存率提升15%。
+          </p>
+          <div class="timeline-skills">
+            <span class="skill-tag">产品管理</span>
+            <span class="skill-tag">用户研究</span>
+            <span class="skill-tag">数据分析</span>
+            <span class="skill-tag">敏捷开发</span>
           </div>
         </div>
-        <div class="controls">
-          <button class="btn btn-primary" id="playTimelineBtn">
-            <span id="playBtnText">Play Timeline</span>
-          </button>
-          <button class="btn btn-outline" id="shareBtn">Share</button>
+      </div>
+      
+      <!-- Timeline Item 2 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2020 - 2022</div>
+          <h3 class="timeline-title">高级产品专员</h3>
+          <div class="timeline-company">InnovateTech Inc.</div>
+          <p class="timeline-description">
+            参与企业SaaS产品的规划和开发，负责用户需求收集、竞品分析和产品迭代。主导实施产品分析框架，提升了团队的数据驱动决策能力。
+          </p>
+          <div class="timeline-skills">
+            <span class="skill-tag">需求分析</span>
+            <span class="skill-tag">产品设计</span>
+            <span class="skill-tag">项目管理</span>
+            <span class="skill-tag">A/B测试</span>
+          </div>
         </div>
       </div>
-    </header>
-
-    <div class="timeline-container">
-      <div class="timeline-track">
-        <div class="timeline-progress" id="timelineProgress"></div>
+      
+      <!-- Timeline Item 3 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2018 - 2020</div>
+          <h3 class="timeline-title">产品助理</h3>
+          <div class="timeline-company">CloudSolutions Co.</div>
+          <p class="timeline-description">
+            支持产品团队的日常运营工作，参与市场调研、用户反馈收集和竞品分析。协助开发和设计团队实现产品功能，贡献创新解决方案。
+          </p>
+          <div class="timeline-skills">
+            <span class="skill-tag">市场调研</span>
+            <span class="skill-tag">用户反馈</span>
+            <span class="skill-tag">原型设计</span>
+            <span class="skill-tag">产品文档</span>
+          </div>
+        </div>
       </div>
-      <div class="timeline-markers" id="timelineMarkers"></div>
-      <div class="timeline-years">
-        <span>2016</span>
-        <span>2025</span>
+      
+      <!-- Timeline Item 4 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2017 - 2018</div>
+          <h3 class="timeline-title">产品实习生</h3>
+          <div class="timeline-company">StartupEdge</div>
+          <p class="timeline-description">
+            在创业公司环境中学习产品开发流程，参与移动应用的功能设计和测试。通过直接与用户互动，培养了解决问题的能力和用户中心设计思维。
+          </p>
+          <div class="timeline-skills">
+            <span class="skill-tag">移动应用</span>
+            <span class="skill-tag">用户测试</span>
+            <span class="skill-tag">敏捷开发</span>
+            <span class="skill-tag">团队协作</span>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="timeline-details" id="timelineDetails"></div>
-
-    <div class="visualization">
-      <h3 class="visualization-title">Skills Growth Over Time</h3>
-      <div class="growth-chart" id="skillsChart"></div>
-    </div>
-
-    <div class="insights">
-      <h3 class="insights-title">Career Insights</h3>
-      <div class="insight-item">
-        <div class="insight-icon">📈</div>
-        <div>
-          <h4>Growth Rate</h4>
-          <p>Your career has shown exceptional growth in product management skills, with a 45% improvement in the last 2 years.</p>
-        </div>
-      </div>
-      <div class="insight-item">
-        <div class="insight-icon">🌟</div>
-        <div>
-          <h4>Standout Achievement</h4>
-          <p>Leading the flagship SaaS platform development shows your ability to manage complex projects and teams.</p>
-        </div>
-      </div>
-      <div class="insight-item">
-        <div class="insight-icon">🔮</div>
-        <div>
-          <h4>Next Opportunity</h4>
-          <p>Based on your trajectory, a Director of Product role could be within reach in the next 1-2 years.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 页脚 -->
-    <footer style="text-align: center; margin-top: 40px; padding: 20px 0; color: var(--muted-text); font-size: 14px; border-top: 1px solid var(--card-border);">
-      <p>© 2023 Professional Network Platform. All rights reserved.</p>
-    </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    const timelineData = [
-      {
-        id: 1,
-        year: 2016,
-        position: "Junior Product Analyst",
-        company: "DataViz Tech",
-        duration: "2016 - 2018",
-        description: "Started career as a product analyst, focusing on market research and user feedback analysis.",
-        skills: ["Market Research", "Data Analysis", "User Feedback"],
-        achievements: [
-          "Improved user feedback collection process by 30%",
-          "Contributed to 2 major product launches"
-        ],
-        stats: {
-          projects: 4,
-          teamSize: 3,
-          impact: "Regional"
-        },
-        skillLevel: 20
-      },
-      {
-        id: 2,
-        year: 2018,
-        position: "Product Manager",
-        company: "InnoTech Solutions",
-        duration: "2018 - 2020",
-        description: "Advanced to product manager role, leading feature development and product roadmap planning.",
-        skills: ["Product Roadmap", "Feature Prioritization", "Stakeholder Management"],
-        achievements: [
-          "Launched 5 key features that increased user retention by 25%",
-          "Led cross-functional team of designers and developers"
-        ],
-        stats: {
-          projects: 8,
-          teamSize: 7,
-          impact: "National"
-        },
-        skillLevel: 45
-      },
-      {
-        id: 3,
-        year: 2020,
-        position: "Senior Product Manager",
-        company: "GlobalApp Inc",
-        duration: "2020 - 2022",
-        description: "Promoted to senior role with responsibility for the company's mobile application suite.",
-        skills: ["Product Strategy", "Mobile App Development", "Team Leadership"],
-        achievements: [
-          "Doubled monthly active users within first year",
-          "Redesigned core user experience, improving satisfaction scores by 40%"
-        ],
-        stats: {
-          projects: 12,
-          teamSize: 12,
-          impact: "Global"
-        },
-        skillLevel: 70
-      },
-      {
-        id: 4,
-        year: 2022,
-        position: "Product Lead",
-        company: "TechCorp",
-        duration: "2022 - Present",
-        description: "Leading product strategy and development for the company's flagship SaaS platform. Managing a team of product managers and working closely with engineering, design, and marketing teams.",
-        skills: ["Product Leadership", "SaaS Platform", "Team Management", "Strategic Planning"],
-        achievements: [
-          "Led successful launch of platform 2.0 with 98% positive user feedback",
-          "Built and mentored a team of 5 product managers",
-          "Increased annual recurring revenue by 60%"
-        ],
-        stats: {
-          projects: 15,
-          teamSize: 25,
-          impact: "Enterprise"
-        },
-        skillLevel: 90
-      }
-    ];
+    // 主题初始化和切换功能
+    function initTheme() {
+      // 检查本地存储中的主题偏好
+      const storedTheme = localStorage.getItem('theme');
+      // 检查系统偏好
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      // 确定要使用的主题
+      const theme = storedTheme || (prefersDark ? 'dark' : 'light');
 
-    // Initialize the timeline
-    function initTimeline() {
-      const markersContainer = document.getElementById('timelineMarkers');
-      const detailsContainer = document.getElementById('timelineDetails');
-      const skillsChart = document.getElementById('skillsChart');
-
-      // Clear any existing content
-      markersContainer.innerHTML = '';
-      detailsContainer.innerHTML = '';
-      skillsChart.innerHTML = '';
-
-      // Calculate positions
-      const totalYears = 2025 - 2016;
-
-      // Create markers and milestone cards
-      timelineData.forEach((milestone, index) => {
-        const position = ((milestone.year - 2016) / totalYears) * 100;
-
-        // Create marker
-        const marker = document.createElement('div');
-        marker.className = 'timeline-marker';
-        marker.setAttribute('data-year', milestone.year);
-        marker.style.left = `${position}%`;
-        marker.dataset.index = index;
-        markersContainer.appendChild(marker);
-
-        // Create milestone card
-        const card = document.createElement('div');
-        card.className = 'milestone-card';
-        card.id = `milestone-${index}`;
-        card.innerHTML = `
-          <div class="milestone-header">
-            <h3 class="milestone-title">${milestone.position}</h3>
-            <span class="milestone-duration">${milestone.duration}</span>
-          </div>
-          <div class="milestone-content">
-            <div class="milestone-logo">${milestone.company.charAt(0)}</div>
-            <div class="milestone-details">
-              <h4>${milestone.company}</h4>
-              <p>${milestone.description}</p>
-              <div class="skills-container">
-                ${milestone.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-              </div>
-              <div class="achievements">
-                <h4>Key Achievements</h4>
-                ${milestone.achievements.map(achievement => `
-                  <div class="achievement-item">
-                    <span class="achievement-icon">✅</span>
-                    <span>${achievement}</span>
-                  </div>
-                `).join('')}
-              </div>
-              <div class="stats-container">
-                <div class="stat-item">
-                  <div class="stat-value">${milestone.stats.projects}</div>
-                  <div class="stat-label">Projects</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-value">${milestone.stats.teamSize}</div>
-                  <div class="stat-label">Team Size</div>
-                </div>
-                <div class="stat-item">
-                  <div class="stat-value">${milestone.stats.impact}</div>
-                  <div class="stat-label">Impact</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        detailsContainer.appendChild(card);
-
-        // Create skill chart bar
-        const barWidth = 100 / timelineData.length;
-        const barPosition = index * barWidth;
-
-        const chartBar = document.createElement('div');
-        chartBar.className = 'chart-bar';
-        chartBar.style.left = `${barPosition + barWidth/4}%`;
-        chartBar.style.width = `${barWidth/2}%`;
-        chartBar.style.height = '0';
-
-        const chartLabel = document.createElement('div');
-        chartLabel.className = 'chart-label';
-        chartLabel.textContent = milestone.year;
-        chartBar.appendChild(chartLabel);
-
-        const chartValue = document.createElement('div');
-        chartValue.className = 'chart-value';
-        chartValue.textContent = `${milestone.skillLevel}%`;
-        chartBar.appendChild(chartValue);
-
-        skillsChart.appendChild(chartBar);
-
-        // Add event listener to marker
-        marker.addEventListener('click', () => {
-          selectMilestone(index);
-        });
-      });
-
-      // Select the first milestone by default
-      selectMilestone(timelineData.length - 1);
-
-      // Animate skill chart with delay
-      setTimeout(() => {
-        const chartBars = document.querySelectorAll('.chart-bar');
-        chartBars.forEach((bar, index) => {
-          bar.style.height = `${timelineData[index].skillLevel}%`;
-        });
-      }, 500);
-    }
-
-    // Select a milestone
-    function selectMilestone(index) {
-      // Update active marker
-      const markers = document.querySelectorAll('.timeline-marker');
-      markers.forEach((marker, i) => {
-        if (i === parseInt(index)) {
-          marker.classList.add('active');
-        } else {
-          marker.classList.remove('active');
-        }
-      });
-
-      // Update active milestone card
-      const cards = document.querySelectorAll('.milestone-card');
-      cards.forEach((card, i) => {
-        if (i === parseInt(index)) {
-          card.classList.add('active');
-        } else {
-          card.classList.remove('active');
-        }
-      });
-
-      // Update timeline progress
-      const progress = document.getElementById('timelineProgress');
-      const position = ((timelineData[index].year - 2016) / (2025 - 2016)) * 100;
-      progress.style.width = `${position}%`;
-    }
-
-    // Play timeline animation
-    let isPlaying = false;
-    let playInterval;
-    let currentIndex = 0;
-
-    function togglePlayTimeline() {
-      const playBtn = document.getElementById('playTimelineBtn');
-      const playBtnText = document.getElementById('playBtnText');
-
-      if (isPlaying) {
-        clearInterval(playInterval);
-        playBtnText.textContent = 'Play Timeline';
-        isPlaying = false;
-      } else {
-        currentIndex = 0;
-        playBtnText.textContent = 'Pause';
-        isPlaying = true;
-
-        selectMilestone(currentIndex);
-
-        playInterval = setInterval(() => {
-          currentIndex++;
-          if (currentIndex >= timelineData.length) {
-            clearInterval(playInterval);
-            playBtnText.textContent = 'Play Timeline';
-            isPlaying = false;
-            return;
-          }
-          selectMilestone(currentIndex);
-        }, 2000);
-      }
-    }
-
-    // Share functionality
-    function shareTimeline() {
-      alert('Share functionality would be implemented here. This would allow users to create a public link to their professional timeline or export it as a PDF.');
-    }
-
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', () => {
-      initTimeline();
-
-      // 主题初始化和切换功能
-      function initTheme() {
-        // 检查本地存储中的主题偏好
-        const storedTheme = localStorage.getItem('theme');
-        // 检查系统偏好
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // 确定要使用的主题
-        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
-
-        // 应用主题
-        applyTheme(theme);
-
-        // 更新主题切换按钮图标
-        updateThemeToggleIcon(theme);
-      }
-
-      // 应用主题到文档
-      function applyTheme(theme) {
-        // 设置data-theme属性
-        document.documentElement.setAttribute('data-theme', theme);
-
-        // 保存主题偏好到本地存储
-        localStorage.setItem('theme', theme);
-      }
+      // 应用主题
+      applyTheme(theme);
 
       // 更新主题切换按钮图标
-      function updateThemeToggleIcon(theme) {
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-          themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      updateThemeToggleIcon(theme);
+    }
+
+    // 应用主题到文档
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+
+      // 保存主题偏好到本地存储
+      localStorage.setItem('theme', theme);
+
+      // 更新粒子颜色
+      updateParticlesColors();
+    }
+
+    // 更新主题切换按钮图标
+    function updateThemeToggleIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      }
+    }
+
+    // 切换主题
+    function toggleTheme() {
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+      applyTheme(newTheme);
+      updateThemeToggleIcon(newTheme);
+    }
+
+    // 更新粒子颜色
+    function updateParticlesColors() {
+      if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+        const storedTheme = localStorage.getItem('theme');
+        const isDark = storedTheme === 'dark';
+        const pJS = window.pJSDom[0].pJS;
+
+        // 更新粒子颜色
+        pJS.particles.color.value = isDark ? "#dbeafe" : "#7dd3fc";
+        pJS.particles.line_linked.color = isDark ? "#93c5fd" : "#3b82f6";
+
+        // 更新粒子透明度
+        pJS.particles.opacity.value = isDark ? 0.3 : 0.2;
+
+        // 刷新粒子
+        pJS.fn.particlesRefresh();
+
+        // 更新粒子背景元素
+        const particlesElement = document.getElementById('particles-js');
+        if (particlesElement) {
+          // 强制重新应用背景样式
+          particlesElement.style.background = '';
+          setTimeout(() => {
+            particlesElement.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg-gradient');
+          }, 0);
         }
       }
+    }
 
-      // 切换主题
-      function toggleTheme() {
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-        applyTheme(newTheme);
-        updateThemeToggleIcon(newTheme);
-      }
-
-      // 初始化主题
-      initTheme();
-
-      // 添加事件监听器
-      document.getElementById('playTimelineBtn').addEventListener('click', togglePlayTimeline);
-      document.getElementById('shareBtn').addEventListener('click', shareTimeline);
-
-      // 主题切换按钮
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 添加主题切换按钮事件监听器
       const themeToggle = document.getElementById('themeToggle');
       if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
+        // 确保按钮图标与当前主题一致
+        updateThemeToggleIcon(localStorage.getItem('theme') || 'dark');
       }
 
-      // 返回按钮功能
-      const backButton = document.getElementById('backButton');
-      const pageTransition = document.getElementById('pageTransition');
-
-      backButton.addEventListener('click', () => {
-        // 确保过渡页面使用当前主题
-        const currentTheme = localStorage.getItem('theme') || 'light';
-
-        // 添加动画状态类
-        document.body.classList.add('page-animating');
-
-        // 确保过渡元素的主题与当前主题一致
-        if (currentTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
-          document.documentElement.setAttribute('data-theme', '');
-        }
-
-        // 激活过渡动画
-        pageTransition.classList.add('active');
-
-        // 动画完成后跳转回主页
-        setTimeout(() => {
-          window.location.href = 'professional-network-interface-editable.html';
-        }, 600);
+      // 初始化粒子效果
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 50,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": localStorage.getItem('theme') === 'dark' ? "#dbeafe" : "#7dd3fc"
+          },
+          "shape": {
+            "type": "circle"
+          },
+          "opacity": {
+            "value": localStorage.getItem('theme') === 'dark' ? 0.3 : 0.4,
+            "random": true
+          },
+          "size": {
+            "value": 3,
+            "random": true
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": localStorage.getItem('theme') === 'dark' ? "#93c5fd" : "#3b82f6",
+            "opacity": localStorage.getItem('theme') === 'dark' ? 0.2 : 0.3,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 140,
+              "line_linked": {
+                "opacity": 0.4
+              }
+            },
+            "push": {
+              "particles_nb": 3
+            }
+          }
+        },
+        "retina_detect": true
       });
 
-      // 防止页面出现过多的空白区域
-      document.body.style.minHeight = "100vh";
-      document.body.style.height = "auto";
+      // 添加返回按钮的事件处理
+      const backButton = document.getElementById('backButton');
+      if (backButton) {
+        backButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetUrl = this.getAttribute('href');
+          
+          // 添加动画状态类
+          document.body.classList.add('page-animating');
+          const pageTransition = document.getElementById('pageTransition');
+          if (pageTransition) {
+            pageTransition.classList.add('active');
+          }
+          
+          // 动画完成后跳转到目标页面
+          setTimeout(() => {
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+          }, 600);
+        });
+      }
     });
+
+    // 初始化主题
+    initTheme();
   </script>
 </body>
 </html>
