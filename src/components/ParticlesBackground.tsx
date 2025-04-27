@@ -85,6 +85,17 @@ const ParticlesBackground: React.FC = () => {
         .getPropertyValue('--particles-line-color')
         .trim();
 
+      // 确保粒子容器不会干扰滚动
+      if (containerRef.current) {
+        containerRef.current.style.position = 'fixed';
+        containerRef.current.style.top = '0';
+        containerRef.current.style.left = '0';
+        containerRef.current.style.width = '100%';
+        containerRef.current.style.height = '100%';
+        containerRef.current.style.zIndex = '1';
+        containerRef.current.style.pointerEvents = 'none'; // 防止捕获滚动事件
+      }
+
       const config: ParticlesConfig = {
         particles: {
           number: {
@@ -155,6 +166,18 @@ const ParticlesBackground: React.FC = () => {
 
       // 初始化粒子
       window.particlesJS('particles-js', config);
+
+      // 重要：确保粒子容器不会阻止页面滚动
+      const particlesContainer = document.getElementById('particles-js');
+      if (particlesContainer) {
+        particlesContainer.style.position = 'fixed';
+        particlesContainer.style.top = '0';
+        particlesContainer.style.left = '0';
+        particlesContainer.style.width = '100%';
+        particlesContainer.style.height = '100%';
+        particlesContainer.style.zIndex = '1';
+        particlesContainer.style.pointerEvents = 'none';
+      }
     }
 
     // 清理函数
@@ -188,7 +211,18 @@ const ParticlesBackground: React.FC = () => {
     }
   }, [theme]);
 
-  return <div id="particles-js" ref={containerRef} />;
+  // 添加额外样式确保不会干扰滚动
+  const particlesStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 1,
+    pointerEvents: 'none' // 防止捕获滚动事件
+  };
+
+  return <div id="particles-js" ref={containerRef} style={particlesStyle} />;
 };
 
 // 声明全局变量以避免TypeScript错误

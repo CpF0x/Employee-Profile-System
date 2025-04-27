@@ -5,6 +5,15 @@ import './styles/ThemeNotification.css';
 import ThemeNotification from './components/theme/ThemeNotification';
 import { useThemeNotification } from './hooks/useThemeNotification';
 
+// 教育经历数据结构
+interface EducationItem {
+  id: string;
+  school: string;
+  degree: string;
+  years: string;
+  logo: string;
+}
+
 const App: React.FC = () => {
   const navigate = useNavigate();
 
@@ -19,14 +28,18 @@ const App: React.FC = () => {
   // 资料编辑状态
   const [isEditing, setIsEditing] = useState(false);
 
-  // 个人资料数据
-  const [profileData, setProfileData] = useState({
-    name: "Alex Johnson",
-    headline: "Senior Product Manager | Technology Enthusiast",
-    currentPosition: "Product Lead at TechCorp",
-    location: "San Francisco Bay Area",
-    avatarUrl: "",
-    bannerUrl: ""
+  // 个人资料数据 - 添加LocalStorage持久化
+  const [profileData, setProfileData] = useState(() => {
+    // 从LocalStorage加载数据，如果没有则使用默认值
+    const savedProfile = localStorage.getItem('profileData');
+    return savedProfile ? JSON.parse(savedProfile) : {
+      name: "Alex Johnson",
+      headline: "Senior Product Manager | Technology Enthusiast",
+      currentPosition: "Product Lead at TechCorp",
+      location: "San Francisco Bay Area",
+      avatarUrl: "",
+      bannerUrl: ""
+    };
   });
 
   // 表单数据
@@ -34,6 +47,42 @@ const App: React.FC = () => {
 
   // 使用主题通知钩子
   const { notification, isVisible, showThemeNotification } = useThemeNotification();
+
+  // 教育经历数据 - 添加LocalStorage持久化
+  const [educationItems, setEducationItems] = useState<EducationItem[]>(() => {
+    // 从LocalStorage加载数据，如果没有则使用默认值
+    const savedItems = localStorage.getItem('educationItems');
+    return savedItems ? JSON.parse(savedItems) : [
+      {
+        id: '1',
+        school: 'Stanford University',
+        degree: 'Master of Business Administration (MBA)',
+        years: '2015 - 2017',
+        logo: 'S'
+      },
+      {
+        id: '2',
+        school: 'University of California, Berkeley',
+        degree: 'Bachelor of Science in Computer Science',
+        years: '2011 - 2015',
+        logo: 'B'
+      }
+    ];
+  });
+
+  // 教育编辑状态
+  const [isEducationEditing, setIsEducationEditing] = useState(false);
+  const [educationFormData, setEducationFormData] = useState<EducationItem | null>(null);
+
+  // 保存教育数据到LocalStorage的副作用
+  useEffect(() => {
+    localStorage.setItem('educationItems', JSON.stringify(educationItems));
+  }, [educationItems]);
+
+  // 保存个人资料数据到LocalStorage的副作用
+  useEffect(() => {
+    localStorage.setItem('profileData', JSON.stringify(profileData));
+  }, [profileData]);
 
   // 应用主题
   useEffect(() => {
@@ -259,10 +308,28 @@ const App: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
+        const newAvatarUrl = event.target?.result as string;
+        // 立即更新formData状态
         setFormData({
           ...formData,
-          avatarUrl: event.target?.result as string
+          avatarUrl: newAvatarUrl
         });
+        
+        // 同时更新profileData，确保即使不点保存也能预览
+        setProfileData((prevProfile: {
+          name: string;
+          headline: string;
+          currentPosition: string;
+          location: string;
+          avatarUrl: string;
+          bannerUrl: string;
+        }) => ({
+          ...prevProfile,
+          avatarUrl: newAvatarUrl
+        }));
+        
+        // 显示通知
+        showThemeNotification('头像已更新');
       };
       reader.readAsDataURL(file);
     }
@@ -274,10 +341,28 @@ const App: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
+        const newBannerUrl = event.target?.result as string;
+        // 立即更新formData状态
         setFormData({
           ...formData,
-          bannerUrl: event.target?.result as string
+          bannerUrl: newBannerUrl
         });
+        
+        // 同时更新profileData，确保即使不点保存也能预览
+        setProfileData((prevProfile: {
+          name: string;
+          headline: string;
+          currentPosition: string;
+          location: string;
+          avatarUrl: string;
+          bannerUrl: string;
+        }) => ({
+          ...prevProfile,
+          bannerUrl: newBannerUrl
+        }));
+        
+        // 显示通知
+        showThemeNotification('背景图片已更新');
       };
       reader.readAsDataURL(file);
     }
@@ -300,6 +385,67 @@ const App: React.FC = () => {
   const handleCancel = () => {
     setFormData(profileData);
     setIsEditing(false);
+  };
+
+  // 开始编辑教育经历项
+  const handleEducationEdit = (item: EducationItem) => {
+    setEducationFormData({...item});
+    setIsEducationEditing(true);
+  };
+
+  // 添加新的教育经历
+  const handleEducationAdd = () => {
+    setEducationFormData({
+      id: Date.now().toString(),
+      school: '',
+      degree: '',
+      years: '',
+      logo: ''
+    });
+    setIsEducationEditing(true);
+  };
+
+  // 处理教育经历输入变化
+  const handleEducationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setEducationFormData(prev => prev ? {
+      ...prev,
+      [id.replace('Education', '')]: value
+    } : null);
+  };
+
+  // 保存教育经历
+  const handleEducationSave = () => {
+    if (!educationFormData) return;
+    
+    // 查找是否已存在
+    const index = educationItems.findIndex(item => item.id === educationFormData.id);
+    
+    if (index >= 0) {
+      // 更新现有项
+      const newItems = [...educationItems];
+      newItems[index] = educationFormData;
+      setEducationItems(newItems);
+    } else {
+      // 添加新项
+      setEducationItems([...educationItems, educationFormData]);
+    }
+    
+    setIsEducationEditing(false);
+    setEducationFormData(null);
+    showThemeNotification('教育经历已更新！');
+  };
+
+  // 取消教育经历编辑
+  const handleEducationCancel = () => {
+    setIsEducationEditing(false);
+    setEducationFormData(null);
+  };
+
+  // 删除教育经历
+  const handleEducationDelete = (id: string) => {
+    setEducationItems(educationItems.filter(item => item.id !== id));
+    showThemeNotification('教育经历已删除');
   };
 
   // 处理登出
@@ -492,26 +638,82 @@ const App: React.FC = () => {
           <div className="card">
             <div className="section-title">
               <h2>Education</h2>
-              <button className="edit-profile">✏️</button>
-            </div>
-
-            <div className="experience-item">
-              <div className="experience-logo">S</div>
-              <div className="experience-details">
-                <h3>Stanford University</h3>
-                <div className="experience-company">Master of Business Administration (MBA)</div>
-                <div className="experience-date">2015 - 2017</div>
+              <div>
+                <button className="edit-profile" onClick={handleEducationAdd}>➕</button>
+                <button className="edit-profile" onClick={() => setIsEducationEditing(!isEducationEditing)}>✏️</button>
               </div>
             </div>
 
-            <div className="experience-item">
-              <div className="experience-logo">B</div>
-              <div className="experience-details">
-                <h3>University of California, Berkeley</h3>
-                <div className="experience-company">Bachelor of Science in Computer Science</div>
-                <div className="experience-date">2011 - 2015</div>
+            {/* 查看模式 */}
+            {!isEducationEditing && educationItems.map(item => (
+              <div className="experience-item" key={item.id}>
+                <div className="experience-logo">{item.logo}</div>
+                <div className="experience-details">
+                  <h3>{item.school}</h3>
+                  <div className="experience-company">{item.degree}</div>
+                  <div className="experience-date">{item.years}</div>
+                </div>
+                <button className="edit-item" onClick={() => handleEducationEdit(item)}>✏️</button>
               </div>
-            </div>
+            ))}
+
+            {/* 编辑模式 */}
+            {isEducationEditing && educationFormData && (
+              <div className="education-edit-form">
+                <div className="form-group">
+                  <label htmlFor="schoolEducation">学校名称</label>
+                  <input
+                    type="text"
+                    id="schoolEducation"
+                    value={educationFormData.school}
+                    onChange={handleEducationInputChange}
+                    placeholder="输入学校名称"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="degreeEducation">学位/专业</label>
+                  <input
+                    type="text"
+                    id="degreeEducation"
+                    value={educationFormData.degree}
+                    onChange={handleEducationInputChange}
+                    placeholder="输入学位和专业"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="yearsEducation">就读时间</label>
+                  <input
+                    type="text"
+                    id="yearsEducation"
+                    value={educationFormData.years}
+                    onChange={handleEducationInputChange}
+                    placeholder="例如: 2015 - 2017"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="logoEducation">Logo字母</label>
+                  <input
+                    type="text"
+                    id="logoEducation"
+                    value={educationFormData.logo}
+                    onChange={handleEducationInputChange}
+                    placeholder="单个字母作为Logo"
+                    maxLength={1}
+                  />
+                </div>
+                
+                <div className="edit-buttons">
+                  <button className="btn btn-primary" onClick={handleEducationSave}>保存</button>
+                  <button className="btn btn-secondary" onClick={handleEducationCancel}>取消</button>
+                  {educationFormData.id && educationItems.some(item => item.id === educationFormData.id) && (
+                    <button className="btn btn-danger" onClick={() => handleEducationDelete(educationFormData.id)}>删除</button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

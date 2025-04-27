@@ -3,6 +3,17 @@
   min-height: 100vh;
   width: 100%;
   position: relative;
+  overflow-y: visible; /* 确保页面可以正常滚动 */
+  overscroll-behavior: auto; /* 确保正常滚动行为 */
+}
+
+html, body {
+  height: auto !important;
+  min-height: 100%;
+  overflow: auto !important;
+  overscroll-behavior: auto;
+  position: relative !important;
+  max-height: none !important; /* 防止高度限制 */
 }
 
 .timeline-header-section {
@@ -34,7 +45,7 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 40px 0;
-  overflow: hidden;
+  overflow: visible; /* 修改为visible以确保不限制滚动 */
 }
 
 /* 时间轴中心线 */
@@ -350,4 +361,101 @@
   z-index: 1000;
   transition: opacity 0.3s ease, transform 0.3s ease;
   backdrop-filter: blur(5px);
+}
+
+/* 编辑按钮 */
+.timeline-edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.timeline-panel:hover .timeline-edit-button {
+  opacity: 0.7;
+}
+
+.timeline-edit-button:hover {
+  opacity: 1;
+}
+
+/* 添加按钮 */
+.add-timeline-item {
+  background: var(--primary-gradient, linear-gradient(135deg, #38bdf8, #818cf8));
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 编辑模态窗口 */
+.timeline-edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.timeline-edit-form {
+  background-color: var(--card-bg, white);
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  color: var(--text-color, black);
+  margin: auto;
+}
+
+.timeline-edit-form h2 {
+  margin-bottom: 20px;
+  color: var(--heading-color, black);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* 修复滚动问题的额外样式 */
+#particles-js {
+  position: fixed !important; /* 确保粒子背景不会干扰滚动 */
+  pointer-events: none; /* 防止粒子背景捕获滚动事件 */
+}
+
+/* 防止页面滚动被锁定 */
+.timeline-page.locked {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+body.no-scroll {
+  overflow: auto !important;
+  height: auto !important;
+}
+
+/* 确保内容可以完全滚动 */
+.container {
+  position: relative !important;
+  z-index: 2;
+  overflow: visible;
 } 
