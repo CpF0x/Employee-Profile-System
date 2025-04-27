@@ -4,6 +4,7 @@ import './styles/main.css';
 import './styles/ThemeNotification.css';
 import ThemeNotification from './components/theme/ThemeNotification';
 import { useThemeNotification } from './hooks/useThemeNotification';
+import { useAnimatedNavigation } from './hooks/useAnimatedNavigation';
 
 // 教育经历数据结构
 interface EducationItem {
@@ -16,6 +17,7 @@ interface EducationItem {
 
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const { animatedNavigate, handleLinkClick } = useAnimatedNavigation();
 
   // 主题状态管理
   const [theme, setTheme] = useState(() => {
@@ -115,35 +117,6 @@ const App: React.FC = () => {
       initParticles();
     }
 
-    // 添加页面过渡动画处理
-    const handleTimelineLinks = () => {
-      const timelineLinks = document.querySelectorAll('.timeline-link');
-      const pageTransition = document.getElementById('pageTransition');
-
-      timelineLinks.forEach(link => {
-        link.addEventListener('click', function(this: HTMLAnchorElement, e) {
-          e.preventDefault();
-          const targetUrl = this.getAttribute('href');
-
-          // 添加动画状态类
-          document.body.classList.add('page-animating');
-          if (pageTransition) {
-            pageTransition.classList.add('active');
-          }
-
-          // 动画完成后跳转到目标页面
-          setTimeout(() => {
-            if (targetUrl) {
-              window.location.href = targetUrl;
-            }
-          }, 600);
-        });
-      });
-    };
-
-    // 当DOM加载完成后设置链接事件
-    handleTimelineLinks();
-
     // 强制滚动条显示
     document.body.style.overflowY = 'scroll';
     document.body.style.height = 'auto';
@@ -155,9 +128,6 @@ const App: React.FC = () => {
       if ((window as any).pJSDom && (window as any).pJSDom.length) {
         (window as any).pJSDom = [];
       }
-
-      // 移除页面过渡动画类
-      document.body.classList.remove('page-animating');
     };
   }, []);
 
@@ -452,15 +422,12 @@ const App: React.FC = () => {
   const handleLogout = () => {
     // 这里可以添加登出逻辑，比如清除token等
     console.log('用户登出');
-    navigate('/');
+    animatedNavigate('/');
   };
 
   return (
     <div className="app-container">
       <div id="particles-js"></div>
-
-      {/* 页面过渡动画元素 */}
-      <div className="page-transition" id="pageTransition"></div>
 
       {/* 主题切换按钮 */}
       <button
@@ -484,28 +451,34 @@ const App: React.FC = () => {
           <ul className="nav-links">
             <li className="nav-item">
               <span className="icon">🏠</span>
-              <a href="#">Home</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Home</a>
             </li>
             <li className="nav-item">
               <span className="icon">👥</span>
-              <a href="/network">Network</a>
+              <a href="#" onClick={(e) => {
+                e.preventDefault();
+                animatedNavigate('/network');
+              }}>Network</a>
             </li>
             <li className="nav-item">
               <span className="icon">💼</span>
-              <a href="#">Jobs</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Jobs</a>
             </li>
             <li className="nav-item">
               <span className="icon">📋</span>
-              <a href="/timeline">Experience</a>
+              <a href="#" onClick={(e) => {
+                e.preventDefault();
+                animatedNavigate('/timeline');
+              }}>Experience</a>
             </li>
             <li className="nav-item">
               <span className="icon">✉️</span>
-              <a href="#">Messages</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Messages</a>
             </li>
             <li className="nav-item">
               <span className="icon">🔔</span>
               <span className="notification-badge">3</span>
-              <a href="#">Notifications</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>Notifications</a>
             </li>
           </ul>
 
@@ -626,7 +599,14 @@ const App: React.FC = () => {
               <p style={{ marginBottom: '20px', color: 'var(--nav-text)', transition: 'color 0.3s ease' }}>
                 探索我的职业成长历程，了解我的项目经验和技能发展
               </p>
-              <Link to="/timeline" style={{ display: 'inline-block', textDecoration: 'none' }}>
+              <Link 
+                to="/timeline" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  animatedNavigate('/timeline');
+                }}
+                style={{ display: 'inline-block', textDecoration: 'none' }}
+              >
                 <button className="btn btn-primary">
                   <span>📋</span> 查看完整经验时间线
                 </button>
