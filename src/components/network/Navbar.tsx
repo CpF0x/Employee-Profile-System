@@ -1,53 +1,14 @@
 import React, { useState } from 'react';
 import SearchBar from '../common/SearchBar';
-
-interface NavItemProps {
-  icon: string;
-  label: string;
-  notificationCount?: number;
-  active?: boolean;
-  onClick?: () => void;
-  href?: string;
-  className?: string;
-}
+import { useAnimatedNavigation } from '../../hooks/useAnimatedNavigation';
 
 interface NavbarProps {
   onLogout?: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({
-  icon,
-  label,
-  notificationCount,
-  active,
-  onClick,
-  href = '#',
-  className = ''
-}) => {
-  return (
-    <li className={`nav-item ${active ? 'active' : ''}`}>
-      <a
-        href={href}
-        className={`nav-link ${className}`}
-        onClick={(e) => {
-          if (onClick) {
-            e.preventDefault();
-            onClick();
-          }
-        }}
-      >
-        <span className="icon">{icon}</span>
-        {notificationCount !== undefined && notificationCount > 0 && (
-          <span className="notification-badge">{notificationCount > 9 ? '9+' : notificationCount}</span>
-        )}
-        <span>{label}</span>
-      </a>
-    </li>
-  );
-};
-
 const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { animatedNavigate } = useAnimatedNavigation();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -61,6 +22,10 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
     }
   };
 
+  const navigateTo = (path: string) => {
+    animatedNavigate(path);
+  };
+
   return (
     <header>
       <div className="container">
@@ -69,17 +34,72 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
           <SearchBar onSearch={handleSearch} placeholder="Search" />
           <nav>
             <ul className="nav-links">
-              <NavItem icon="🏠" label="Home" href="/home" />
-              <NavItem icon="👥" label="Network" active />
-              <NavItem icon="💼" label="Jobs" />
-              <NavItem
-                icon="📋"
-                label="Experience"
-                href="/timeline"
-              />
-              <NavItem icon="✉️" label="Messages" />
-              <NavItem icon="🔔" label="Notifications" notificationCount={3} />
-              <NavItem icon="🎨" label="主题演示" href="/theme-demo" />
+              <li className="nav-item">
+                <a 
+                  href="#" 
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('/home');
+                  }}
+                >
+                  <span className="icon">🏠</span>
+                  <span>Home</span>
+                </a>
+              </li>
+              <li className="nav-item active">
+                <a href="#" className="nav-link">
+                  <span className="icon">👥</span>
+                  <span>Network</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#" className="nav-link">
+                  <span className="icon">💼</span>
+                  <span>Jobs</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a 
+                  href="#" 
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('/timeline');
+                  }}
+                >
+                  <span className="icon">📋</span>
+                  <span>Experience</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#" className="nav-link">
+                  <span className="icon">✉️</span>
+                  <span>Messages</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#" className="nav-link">
+                  <span className="icon">🔔</span>
+                  {3 > 0 && (
+                    <span className="notification-badge">{3 > 9 ? '9+' : 3}</span>
+                  )}
+                  <span>Notifications</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a 
+                  href="#" 
+                  className="nav-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('/theme-demo');
+                  }}
+                >
+                  <span className="icon">🎨</span>
+                  <span>主题演示</span>
+                </a>
+              </li>
             </ul>
           </nav>
           <div className="profile-section">
