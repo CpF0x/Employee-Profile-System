@@ -439,7 +439,7 @@ textarea {
 /* 修复滚动问题的额外样式 */
 #particles-js {
   position: fixed !important; /* 确保粒子背景不会干扰滚动 */
-  pointer-events: none; /* 防止粒子背景捕获滚动事件 */
+  /* pointer-events: none; 已移除此属性以恢复粒子交互功能 */
 }
 
 /* 防止页面滚动被锁定 */
