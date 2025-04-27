@@ -243,16 +243,25 @@ const TimelinePage: React.FC = () => {
     
     const index = timelineItems.findIndex(item => item.id === editingTimelineItem.id);
     
+    let newTimelineItems;
     if (index >= 0) {
       // 更新现有项
-      const newItems = [...timelineItems];
-      newItems[index] = editingTimelineItem;
-      setTimelineItems(newItems);
+      newTimelineItems = [...timelineItems];
+      newTimelineItems[index] = editingTimelineItem;
     } else {
       // 添加新项
-      setTimelineItems([...timelineItems, editingTimelineItem]);
+      newTimelineItems = [...timelineItems, editingTimelineItem];
     }
     
+    // 按年份从新到旧排序
+    newTimelineItems.sort((a, b) => {
+      // 解析年份为数字进行比较
+      const yearA = parseInt(a.year) || 0;
+      const yearB = parseInt(b.year) || 0;
+      return yearB - yearA; // 降序排列，从新到旧
+    });
+    
+    setTimelineItems(newTimelineItems);
     setIsTimelineEditing(false);
     setEditingTimelineItem(null);
     // 恢复背景滚动
