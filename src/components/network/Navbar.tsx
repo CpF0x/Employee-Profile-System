@@ -15,19 +15,19 @@ interface NavbarProps {
   onLogout?: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ 
-  icon, 
-  label, 
-  notificationCount, 
-  active, 
+const NavItem: React.FC<NavItemProps> = ({
+  icon,
+  label,
+  notificationCount,
+  active,
   onClick,
   href = '#',
   className = ''
 }) => {
   return (
     <li className={`nav-item ${active ? 'active' : ''}`}>
-      <a 
-        href={href} 
+      <a
+        href={href}
         className={`nav-link ${className}`}
         onClick={(e) => {
           if (onClick) {
@@ -69,17 +69,17 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
           <SearchBar onSearch={handleSearch} placeholder="Search" />
           <nav>
             <ul className="nav-links">
-              <NavItem icon="🏠" label="Home" active />
-              <NavItem icon="👥" label="Network" />
+              <NavItem icon="🏠" label="Home" href="/home" />
+              <NavItem icon="👥" label="Network" active />
               <NavItem icon="💼" label="Jobs" />
-              <NavItem 
-                icon="📋" 
-                label="Experience" 
-                href="professional-timeline.html"
-                className="timeline-link"
+              <NavItem
+                icon="📋"
+                label="Experience"
+                href="/timeline"
               />
               <NavItem icon="✉️" label="Messages" />
               <NavItem icon="🔔" label="Notifications" notificationCount={3} />
+              <NavItem icon="🎨" label="主题演示" href="/theme-demo" />
             </ul>
           </nav>
           <div className="profile-section">
@@ -92,4 +92,4 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

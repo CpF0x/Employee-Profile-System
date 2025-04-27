@@ -2,15 +2,22 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import '../styles/Login.css';
+import '../styles/ThemeNotification.css';
+import ThemeNotification from '../components/theme/ThemeNotification';
+import { useThemeNotification } from '../hooks/useThemeNotification';
 
 interface LoginPageProps {
   onLogin?: () => void;
 }
 
+interface ThemeTogglePortalProps {
+  showThemeNotification: (message: string, duration?: number) => void;
+}
+
 /**
  * 主题切换按钮Portal组件
  */
-const ThemeTogglePortal: React.FC = () => {
+const ThemeTogglePortal: React.FC<ThemeTogglePortalProps> = ({ showThemeNotification }) => {
   return createPortal(
     <button 
       className="theme-toggle" 
@@ -41,6 +48,9 @@ const ThemeTogglePortal: React.FC = () => {
           // 刷新粒子
           pJS.fn.particlesRefresh();
         }
+
+        // 显示主题切换通知
+        showThemeNotification(`已切换到${newTheme === 'dark' ? '深色' : '浅色'}主题`);
       }}
       aria-label="切换主题"
     >
@@ -55,6 +65,8 @@ const ThemeTogglePortal: React.FC = () => {
  */
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const navigate = useNavigate();
+  // 使用主题通知钩子 - 提升到父组件
+  const { notification, isVisible, showThemeNotification } = useThemeNotification();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -233,7 +245,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </div>
       </div>
       {/* 使用Portal将主题切换按钮渲染到body层级 */}
-      <ThemeTogglePortal />
+      <ThemeTogglePortal showThemeNotification={showThemeNotification} />
+      
+      {/* 主题切换通知 */}
+      {notification && (
+        <ThemeNotification
+          message={notification}
+          visible={isVisible}
+        />
+      )}
     </>
   );
 };

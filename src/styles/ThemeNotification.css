@@ -1,0 +1,61 @@
+/* 主题切换通知样式 */
+.theme-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--primary-gradient, linear-gradient(135deg, #38bdf8, #818cf8));
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 通知显示状态 */
+.theme-notification.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 通知隐藏状态 */
+.theme-notification.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* 通知图标 */
+.theme-notification-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 通知消息 */
+.theme-notification-message {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 深色模式下的样式调整 */
+html.dark .theme-notification,
+html[data-theme="dark"] .theme-notification {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .theme-notification {
+    bottom: 15px;
+    right: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    justify-content: center;
+  }
+}

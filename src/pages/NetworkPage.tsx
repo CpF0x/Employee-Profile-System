@@ -7,6 +7,7 @@ import Sidebar from '../components/network/Sidebar';
 import ThemeToggle from '../components/ThemeToggle';
 import ParticlesBackground from '../components/ParticlesBackground';
 import '../styles/Network.css';
+import { useNavigate } from 'react-router-dom';
 
 interface NetworkPageProps {
   onLogout?: () => void;
@@ -70,6 +71,13 @@ const PageTransition: React.FC = () => {
  */
 const NetworkPage: React.FC<NetworkPageProps> = ({ onLogout }) => {
   const [notification, setNotification] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // 处理登出
+  const handleLogout = () => {
+    // 跳转到登录页面
+    navigate('/');
+  };
 
   // 主题变更处理
   const handleThemeChange = (theme: string) => {
@@ -136,7 +144,7 @@ const NetworkPage: React.FC<NetworkPageProps> = ({ onLogout }) => {
   return (
     <div className="network-page">
       <ParticlesBackground />
-      <Navbar onLogout={onLogout} />
+      <Navbar onLogout={handleLogout} />
       
       <div className="container">
         <div className="main-content">

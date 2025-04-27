@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface TimelineCardProps {
   timelineLink?: string;
 }
 
 const TimelineCard: React.FC<TimelineCardProps> = ({ 
-  timelineLink = 'professional-timeline.html' 
+  timelineLink = '/timeline' 
 }) => {
   return (
     <div className="card">
@@ -16,15 +17,14 @@ const TimelineCard: React.FC<TimelineCardProps> = ({
         <p style={{ marginBottom: '20px', color: 'var(--nav-text)', transition: 'color 0.3s ease' }}>
           探索我的职业成长历程，了解我的项目经验和技能发展
         </p>
-        <a 
-          href={timelineLink} 
-          style={{ display: 'inline-block', textDecoration: 'none' }} 
-          className="timeline-link"
+        <Link 
+          to={timelineLink} 
+          style={{ display: 'inline-block', textDecoration: 'none' }}
         >
           <button className="btn btn-primary">
             <span>📋</span> 查看完整经验时间线
           </button>
-        </a>
+        </Link>
       </div>
     </div>
   );

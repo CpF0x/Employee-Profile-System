@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
 import LoginPage from './pages/LoginPage';
+import NetworkPage from './pages/NetworkPage';
+import TimelinePage from './pages/TimelinePage';
+import ThemeDemo from './pages/ThemeDemo';
 import { ThemeProvider } from './context/ThemeContext';
 import './styles/theme.css';
 import './styles/Login.css';
+import './styles/ThemeDemo.css';
 
 // 等待DOM加载完成
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,6 +35,9 @@ root.render(
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/home" element={<App />} />
+          <Route path="/network" element={<NetworkPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
+          <Route path="/theme-demo" element={<ThemeDemo />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

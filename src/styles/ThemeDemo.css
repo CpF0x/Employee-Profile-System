@@ -1,0 +1,64 @@
+.theme-demo-container {
+  min-height: 100vh;
+  padding: 40px;
+  background-color: var(--bg-color, #f1f5f9);
+  color: var(--text-color, #1e293b);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html[data-theme="dark"] .theme-demo-container,
+html.dark .theme-demo-container {
+  --bg-color: #0f172a;
+  --text-color: #e2e8f0;
+}
+
+.theme-demo-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.theme-demo-content h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--heading-color, #1e293b);
+}
+
+html[data-theme="dark"] .theme-demo-content h1,
+html.dark .theme-demo-content h1 {
+  --heading-color: #f1f5f9;
+}
+
+.theme-demo-card {
+  background-color: var(--card-bg, white);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="dark"] .theme-demo-card,
+html.dark .theme-demo-card {
+  --card-bg: #1e293b;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.theme-demo-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--heading-color, #1e293b);
+}
+
+.theme-demo-example {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* 示例通知样式 */
+.theme-notification.example {
+  position: static;
+  display: inline-flex;
+  opacity: 1;
+  transform: none;
+}
