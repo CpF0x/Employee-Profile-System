@@ -8,6 +8,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import ParticlesBackground from '../components/ParticlesBackground';
 import '../styles/Network.css';
 import { useNavigate } from 'react-router-dom';
+import { useAnimatedNavigation } from '../hooks/useAnimatedNavigation';
 
 interface NetworkPageProps {
   onLogout?: () => void;
@@ -56,27 +57,18 @@ const ThemeTogglePortal: React.FC<{onThemeChange: (theme: string) => void}> = ({
 };
 
 /**
- * 页面过渡动画组件
- */
-const PageTransition: React.FC = () => {
-  return createPortal(
-    <div className="page-transition" id="pageTransition"></div>,
-    document.body
-  );
-};
-
-/**
  * 专业网络平台页面
  * 整合所有网络相关组件
  */
 const NetworkPage: React.FC<NetworkPageProps> = ({ onLogout }) => {
   const [notification, setNotification] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { animatedNavigate } = useAnimatedNavigation();
 
   // 处理登出
   const handleLogout = () => {
     // 跳转到登录页面
-    navigate('/');
+    animatedNavigate('/');
   };
 
   // 主题变更处理
@@ -100,44 +92,12 @@ const NetworkPage: React.FC<NetworkPageProps> = ({ onLogout }) => {
     if (!window.particlesJS) {
       loadParticlesScript();
     }
-
-    // 添加页面过渡动画处理
-    const handleTimelineLinks = () => {
-      const timelineLinks = document.querySelectorAll('.timeline-link');
-      const pageTransition = document.getElementById('pageTransition');
-
-      timelineLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetUrl = (this as HTMLAnchorElement).getAttribute('href');
-
-          // 添加动画状态类
-          document.body.classList.add('page-animating');
-          if (pageTransition) {
-            pageTransition.classList.add('active');
-          }
-
-          // 动画完成后跳转到目标页面
-          setTimeout(() => {
-            if (targetUrl) {
-              window.location.href = targetUrl;
-            }
-          }, 600);
-        });
-      });
-    };
-
-    // 当DOM加载完成后设置链接事件
-    handleTimelineLinks();
     
     return () => {
       // 清理粒子实例
       if (window.pJSDom && window.pJSDom.length) {
         window.pJSDom = [];
       }
-      
-      // 移除页面过渡动画类
-      document.body.classList.remove('page-animating');
     };
   }, []);
 
@@ -157,9 +117,6 @@ const NetworkPage: React.FC<NetworkPageProps> = ({ onLogout }) => {
           </div>
         </div>
       </div>
-      
-      {/* 页面过渡动画元素 */}
-      <PageTransition />
       
       {/* 主题切换按钮 */}
       <ThemeTogglePortal onThemeChange={handleThemeChange} />

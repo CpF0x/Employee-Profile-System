@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import Navbar from '../components/network/Navbar';
 import ThemeToggle from '../components/ThemeToggle';
 import ParticlesBackground from '../components/ParticlesBackground';
+import { useAnimatedNavigation } from '../hooks/useAnimatedNavigation';
 import '../styles/Timeline.css';
 
 interface TimelineItemProps {
@@ -23,16 +24,6 @@ interface TimelineItemProps {
 const ThemeTogglePortal: React.FC = () => {
   return createPortal(
     <ThemeToggle />,
-    document.body
-  );
-};
-
-/**
- * 页面过渡动画组件
- */
-const PageTransition: React.FC = () => {
-  return createPortal(
-    <div className="page-transition" id="pageTransition"></div>,
     document.body
   );
 };
@@ -89,6 +80,7 @@ const TimelineItem: React.FC<TimelineItemProps & {
  */
 const TimelinePage: React.FC = () => {
   const navigate = useNavigate();
+  const { animatedNavigate } = useAnimatedNavigation();
   const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const initialScrollApplied = useRef<boolean>(false);
@@ -286,7 +278,7 @@ const TimelinePage: React.FC = () => {
 
   // 处理登出
   const handleLogout = () => {
-    navigate('/');
+    animatedNavigate('/');
   };
 
   // 处理滚动事件，更新激活的时间轴项目
@@ -603,17 +595,13 @@ const TimelinePage: React.FC = () => {
         <div className="back-to-profile">
           <button 
             className="btn btn-primary"
-            onClick={() => navigate('/home')}
+            onClick={() => animatedNavigate('/home')}
           >
             <span>👤</span> 返回个人主页
           </button>
         </div>
       </div>
       
-      {/* 页面过渡动画元素 */}
-      <PageTransition />
-      
-      {/* 主题切换按钮 */}
       <ThemeTogglePortal />
     </div>
   );

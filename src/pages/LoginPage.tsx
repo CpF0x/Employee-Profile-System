@@ -5,6 +5,7 @@ import '../styles/Login.css';
 import '../styles/ThemeNotification.css';
 import ThemeNotification from '../components/theme/ThemeNotification';
 import { useThemeNotification } from '../hooks/useThemeNotification';
+import { useAnimatedNavigation } from '../hooks/useAnimatedNavigation';
 
 interface LoginPageProps {
   onLogin?: () => void;
@@ -65,13 +66,14 @@ const ThemeTogglePortal: React.FC<ThemeTogglePortalProps> = ({ showThemeNotifica
  */
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const navigate = useNavigate();
+  const { animatedNavigate } = useAnimatedNavigation();
   // 使用主题通知钩子 - 提升到父组件
   const { notification, isVisible, showThemeNotification } = useThemeNotification();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('登录尝试');
-    navigate('/home');
+    animatedNavigate('/home');
   };
 
   useEffect(() => {
@@ -248,11 +250,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       <ThemeTogglePortal showThemeNotification={showThemeNotification} />
       
       {/* 主题切换通知 */}
-      {notification && (
-        <ThemeNotification
-          message={notification}
-          visible={isVisible}
-        />
+      {notification && isVisible && (
+        <ThemeNotification message={notification} />
       )}
     </>
   );
