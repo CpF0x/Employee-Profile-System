@@ -205,6 +205,10 @@ yarn install
 
 ### 开发模式运行
 ```bash
+chmod +x node_modules/.bin/vite
+```
+
+```bash
 npm run dev
 # 或
 yarn dev
