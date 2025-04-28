@@ -87,19 +87,6 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
                   <span>Notifications</span>
                 </a>
               </li>
-              <li className="nav-item">
-                <a 
-                  href="#" 
-                  className="nav-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateTo('/theme-demo');
-                  }}
-                >
-                  <span className="icon">🎨</span>
-                  <span>主题演示</span>
-                </a>
-              </li>
             </ul>
           </nav>
           <div className="profile-section">
